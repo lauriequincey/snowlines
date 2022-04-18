@@ -1,7 +1,7 @@
 # snowlines
 
 Earth Engine repository at: https://code.earthengine.google.com/?accept_repo=users/lauriequincey/snowlines.
-The same scripts pushed to this github repo ("earth engine" folder) can be found in the earth engine folder "snowlines".
+The same scripts pushed to this github repo ("earth engine" folder) can be found in the folder "snowlines" when on the earth engine code editor.
 
 Individual Scripts:
 
