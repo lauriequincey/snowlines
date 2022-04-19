@@ -1,10 +1,9 @@
 # snowlines
 
 Earth Engine repository at: https://code.earthengine.google.com/?accept_repo=users/lauriequincey/snowlines.
-Clicking the above link will redirect to the Earth Engine java script code editor, loading this studies code files. Within this repository the scripts can be found in the folder "snowlines". These are the same scripts pushed to this github repo ("earth engine" folder).
+Clicking the above link will redirect to the Earth Engine java script code editor and will allow users to view and run the code files of this study. Within this repository the finished scripts can be found in the folder "snowlines". These are the same scripts pushed to this github repo ("earth engine" folder).
 
-
-Individual Scripts:
+Alternatively, click these to be taken to each script directly:
 
 "climate": https://code.earthengine.google.com/fb56dd0e00e41544187d18e1cd095fa1?noload=true
 
