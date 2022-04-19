@@ -1609,36 +1609,6 @@ function grapher(environmental_image, snowline_geometry) {
       'Elevation / m asl',
       'Distance / km'
       );
-    scatterplotter(
-      pixel_values,
-      ['Cumulative_Snowfall_By_Date_Range_/_m_of_water_equivalent', 'Cumulative_Snowfall_By_Year_/_m_of_water_equivalent', 'Cumulative_Snowfall_By_Summer_/_m_of_water_equivalent', 'Cumulative_Snowfall_By_Winter_/_m_of_water_equivalent', 'Cumulative_Snowfall_By_Spring_/_m_of_water_equivalent', 'Cumulative_Snowfall_By_Autumn_/_m_of_water_equivalent'],
-      'Distance_from_Start_of_Transect_/_m',
-      ['Date Range', 'Year', 'Summer', 'Winter', 'Spring', 'Autumn'],
-      ['#1947ff', '#bdcaff', '#5a7afa', '#91a7ff', '#91a7ff', '#91a7ff'],
-      'Cumulative Snowfall at the Snowline by Transect Distance',
-      'Cumulative Snowfall / metres of water equivelent',
-      'Distance / km'
-      );
-    scatterplotter(
-      pixel_values,
-      ['Mean_2m_Temperature_By_Date_Range_/_K', 'Mean_2m_Temperature_By_Year_/_K', 'Mean_2m_Temperature_By_Summer_/_K', 'Mean_2m_Temperature_By_Winter_/_K', 'Mean_2m_Temperature_By_Spring_/_K', 'Mean_2m_Temperature_By_Autumn_/_K'],
-      'Distance_from_Start_of_Transect_/_m',
-      ['Date Range', 'Year', 'Summer', 'Winter', 'Spring', 'Autumn'],
-      ['#fff0c4', '#ffd75e', '#ffe596', '#fac014', '#fac014', '#fac014'],
-      'Mean Temperature  at the Snowline by Transect Distance',
-      'Temperature / °C',
-      'Distance / km'
-      );
-    scatterplotter(
-      pixel_values,
-      ['Cumulative_Snowmelt_By_Date_Range_/_m_of_water_equivalent', 'Cumulative_Snowmelt_By_Year_/_m_of_water_equivalent', 'Cumulative_Snowmelt_By_Summer_/_m_of_water_equivalent', 'Cumulative_Snowmelt_By_Winter_/_m_of_water_equivalent', 'Cumulative_Snowmelt_By_Spring_/_m_of_water_equivalent', 'Cumulative_Snowmelt_By_Autumn_/_m_of_water_equivalent'],
-      'Distance_from_Start_of_Transect_/_m',
-      ['Date Range', 'Year', 'Summer', 'Winter', 'Spring', 'Autumn'],
-      ['#1947ff', '#bdcaff', '#5a7afa', '#91a7ff', '#91a7ff', '#91a7ff'],
-      'Cumulative Snowmelt at the Snowline by Transect Distance',
-      'Cumulative Snowmelt / metres of water equivelent',
-      'Distance / km'
-      );
     },
   style: {
     width: '150px'
