@@ -18,3 +18,5 @@ Clicking the above link will redirect to the Earth Engine java script code edito
 [Go to: Snowlines Beta Application](https://lauriequincey.users.earthengine.app/view/snowlines-beta)
 
 Analyse spatial snowline altitudes without any code, 'anywhere' in the world, in a matter of minutes.
+
+Note: The end result from running this produces a red coloured snowline. You will have to manually zoom in to see the extent of the delineation as, for speed, Earth Engine applies an adaptive resolution to the viewer.
