@@ -15,10 +15,9 @@ var transect = ee.Geometry.Polygon({
   coords: [lt_coord, lb_coord, rb_coord, rt_coord],
   geodesic: true,
 });
-Map.centerObject(transect).addLayer(transect);
 
-/** Date **/
-var year = ee.Date('2018');
+/** Date USER INPUT**/
+var year = ee.Date('1981'); //<-- Enter year
 var clientside_year = year.get('year').getInfo();
 
 /** Import Climate **/
@@ -39,8 +38,8 @@ var era5land_autumn = ee.ImageCollection('ECMWF/ERA5_LAND/HOURLY')
   .filterBounds(transect)
   .filterDate(ee.DateRange(ee.Date.fromYMD(year.get('year').subtract(1), 9, 01), ee.Date.fromYMD(year.get('year'), 11, 30)));
 
-/** Pick Season and Reduce **/
-var era5_season = era5land_autumn;
+/** Pick Season and Reduce USER INPUT**/
+var era5_season = era5land_winter; //<-- Enter season. Seasons: "summer", "winter", "spring", "autumn". Format: "era5land_winter" (no caps)  
 var climate_mean = era5_season.reduce(ee.Reducer.mean());
 var climate_stdev = era5_season.reduce(ee.Reducer.stdDev()).divide(era5_season.size().sqrt());
 var climate = climate_mean.addBands(climate_stdev);
@@ -79,13 +78,14 @@ var results =  environ.reduceRegions({
       reducer: ee.Reducer.mean(), // there is only 1 value for each band becuase its already been averaged - it does nothing. Dont beleive me? change it to count and see for yourself.
       scale: 11132 // resolution of era5land
       });
-print(results.first());
 
-/** X | Export **/
-Export.table.toDrive({
-  collection: results,
-  description: 'climate_' + 'SEASON' + '_' + clientside_year,
-  folder: '' + clientside_year,
-  fileNamePrefix: 'climate_' + 'SEASON' + '_' + clientside_year,
-  fileFormat: 'CSV'
-});
+/** Export USER INPUT **/
+//Export.table.toDrive({
+//  collection: results,
+//  description: 'climate_' + 'autumn' + '_' + clientside_year,
+//  folder: '' + clientside_year,
+//  fileNamePrefix: 'climate_' + 'autumn' + '_' + clientside_year,
+//  fileFormat: 'CSV'
+//});
+
+print(results.getDownloadURL({format: "CSV", filename: 'climate_' + 'SEASON' + '_' + clientside_year})); // <-- Enter name of season here where it says "season". Make sure its in quotes. Can be named anything.
