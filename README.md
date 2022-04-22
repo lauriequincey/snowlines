@@ -1,5 +1,5 @@
 # Snowlines
-A project to delineate off-glacial mountain snowline altitudes at 30m resolution using Landsats 4-8 and compare to climate (ERA5 Land Hourly Reanalysis) both through space and time. Specifically, this project looks at Southern Norwegian mountains and tests the wider applicability of the novel linear spectral unmixing-based algorithm developed here to Alaska. 
+A project to delineate off-glacial mountain snowline altitudes at 30m resolution using Landsats 4-8 and compare to climate (ERA5 Land Hourly Reanalysis) both through space and time. Specifically, this project looks at the Southern Norwegian mountains and tests the wider applicability of the linear spectral unmixing-based algorithm to Alaska. 
 
 ## Earth Engine Code
 [Go to: Earth Engine Repository](https://code.earthengine.google.com/?accept_repo=users/lauriequincey/snowlines)
