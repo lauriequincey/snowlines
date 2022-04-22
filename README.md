@@ -22,4 +22,4 @@ Analyse spatial snowline altitudes without any code, 'anywhere' in the world, in
 Note: The end result from running this produces a red coloured snowline. You will have to manually zoom in to see the extent of the delineation as, for speed, Earth Engine applies an adaptive resolution to the viewer. This algorithm automatically ignores ice caps and glaciers.
 
 ## Analysis Code
-Analysis scripts can be found under the "analysis" folder. They are written in R script and desgined to be generic so they should work with whatever files are downloaded from the earth engine code.
+Analysis scripts can be found under the "analysis" folder. They are written in R script and desgined to be generic so they should work with whatever files are downloaded from the earth engine code. The scripts are written to work within "~/snowlines/" path.
