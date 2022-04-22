@@ -17,9 +17,12 @@ Clicking the above link will redirect to the Earth Engine java script code edito
 ## Beta Snowlines Application is Live!
 [Go to: Snowlines Beta Application](https://lauriequincey.users.earthengine.app/view/snowlines-beta)
 
-Analyse spatial snowline altitudes without any code, 'anywhere' in the world, in a matter of minutes.
+Resolve snowlines without any code, 'anywhere' in the world, in a matter of minutes.
 
-Note: The end result from running this produces a red coloured snowline. You will have to manually zoom in to see the extent of the delineation as Earth Engine uses adaptive resolution. This algorithm automatically ignores ice caps and glaciers.
+Note:
+- The end result from running this produces a red coloured snow-edge.
+- Glaciers and ice caps are masked, however, an unmasked snow-edge is also available in the map layers.
+- You will likely have to zoom the map viewer to see the snow-edge result in full detail if you are analysing larger than a local area. Why? - Earth Engine analyses are run to the output scale, not input scale. See: https://developers.google.com/earth-engine/guides/scale.
 
 ## Analysis Code
 Analysis scripts can be found under the "analysis" folder. They are written in R script and desgined to be generic so they should work with any files downloaded from earth engine. The scripts are written to work within "~/snowlines/" path.
