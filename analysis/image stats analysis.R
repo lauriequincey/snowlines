@@ -27,14 +27,14 @@ data.image_stats <- do.call(what = rbind, args = lapply(X = data.snowlines, FUN 
 # Add Blank Years
 blank_row <- c(0, 0, 0, 0)
 
-data.image_stats <- rbind(blank_row, blank_row, blank_row, blank_row, data.image_stats)
+data.image_stats <- rbind(blank_row, blank_row, blank_row, data.image_stats)
 
 for(i in c(9, 15, 20, 28, 29, 30, 31)) {
   data.image_stats <- rbind(data.image_stats[1:i,], blank_row, data.image_stats[-(1:i),])
 }
 
 # Rename
-rownames(data.image_stats) <- 1981:2021
+rownames(data.image_stats) <- 1982:2021
 
 # Rotate dataframe and make into matrix
 data.image_stats_matrix = data.matrix(t(data.image_stats))
