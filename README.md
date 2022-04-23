@@ -25,4 +25,4 @@ Note:
 - You will likely have to zoom the map viewer to see the snow-edge result in full detail if you are analysing larger than a local area. Why? - Earth Engine analyses are run to the output scale, not input scale. See: https://developers.google.com/earth-engine/guides/scale.
 
 ## Analysis Code
-Analysis scripts can be found under the "analysis" folder.
+Analysis scripts can be found under the "analysis" folder. They are written in R (v4.1.1).
