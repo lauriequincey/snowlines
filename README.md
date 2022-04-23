@@ -4,7 +4,7 @@ A project to delineate off-glacial mountain snowline altitudes at 30m resolution
 ## Earth Engine Code
 [Go to: Earth Engine Repository](https://code.earthengine.google.com/?accept_repo=users/lauriequincey/snowlines)
 
-Clicking the above link will redirect to the Earth Engine java script code editor and will allow users to view and run the code files of this study.
+Clicking the above link will redirect to the Earth Engine java script code editor and will allow users to view and run the code files of this study. Written in v0.1.276. 
 
 **Within this Earth Engine repository the finished scripts can be found in the folder "snowlines". These are the same scripts pushed to this github repo ("earth engine" folder).**
 
