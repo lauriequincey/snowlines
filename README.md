@@ -12,13 +12,13 @@ Clicking the above link will redirect to the Earth Engine java script code edito
 - "climate.js" processes climate data from the ERA5 Land Hourly Reanalysis dataset at 11,312m resolution for each season.
 - "validation.js" validates the algorithm's performance at recovering snow cover extent against the widely used MOD10A1 product (MODIS psuedo FSC snow cover product).
 - "sun.js" retrieves sun elevations for each date used in the snowlines.js script. Provides additional data for validation analyses.
-- "ui.js" contains the source code for the snowlines application, see below. 
+- "ui.js" contains the source code for the snowlines application, see below. It is a variation of the main algorithm allowing for better visualisation of each intermediary step.
 
 ## Beta Snowlines Application is Live!
 [Go to: Snowlines Beta Application](https://lauriequincey.users.earthengine.app/view/snowlines-beta)
 
 Resolve snowlines without any code, 'anywhere' in the world, in a matter of minutes.
-
+iatioj
 Note:
 - The end result from running this produces a red coloured snow-edge.
 - Glaciers and ice caps are masked, however, an unmasked snow-edge is also available in the map layers.
