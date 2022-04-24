@@ -2,43 +2,50 @@
 data.climate <- readRDS(file = "~/snowlines/data/data.climate.rds")
 
 # Reclassify ####
+# Note: Edit variables (y1, err1) to go through different climate variables
 # Winter
 x1 <- data.climate$`2018`$distance
-y1 <- data.climate$`2018`$winter_snowfall_mean
-err1 <- data.climate$`2018`$winter_snowfall_stdDev
+y1 <- data.climate$`2018`$winter_surface_sensible_heat_flux_mean
+err1 <- data.climate$`2018`$winter_surface_sensible_heat_flux_stdDev
 mdl1 <- lm(y1 ~ poly(x1, 3))
 
 # Summer
 x2 <- data.climate$`2018`$distance
-y2 <- data.climate$`2018`$summer_snowfall_mean
-err2 <- data.climate$`2018`$summer_snowfall_stdDev
+y2 <- data.climate$`2018`$summer_surface_sensible_heat_flux_mean
+err2 <- data.climate$`2018`$summer_surface_sensible_heat_flux_stdDev
 mdl2 <- lm(y2 ~ poly(x2, 3))
 
 # Autumn
 x3 <- data.climate$`2018`$distance
-y3 <- data.climate$`2018`$autumn_snowfall_mean
-err3 <- data.climate$`2018`$autumn_snowfall_stdDev
+y3 <- data.climate$`2018`$autumn_surface_sensible_heat_flux_mean
+err3 <- data.climate$`2018`$autumn_surface_sensible_heat_flux_stdDev
 mdl3 <- lm(y3 ~ poly(x3, 3))
 
 # Spring
 x4 <- data.climate$`2018`$distance
-y4 <- data.climate$`2018`$spring_snowfall_mean
-err4 <- data.climate$`2018`$spring_snowfall_stdDev
+y4 <- data.climate$`2018`$spring_surface_sensible_heat_flux_mean
+err4 <- data.climate$`2018`$spring_surface_sensible_heat_flux_stdDev
 mdl4 <- lm(y4 ~ poly(x4, 3))
 
 # Open SVG ####
-svg(filename = paste0("~/snowlines/outputs/climate space/plots/climate space plot.svg"),
-    width = aes.canvas$width,
-    height = aes.canvas$height,
+#svg(filename = paste0("~/snowlines/outputs/climate space/plots/climate space plot snowfall.svg"),
+#    width = aes.canvas$width,
+#    height = aes.canvas$height,
+#    pointsize = aes.canvas$point_size)
+
+# Open PNG ####
+png(filename = paste0("~/snowlines/outputs/climate space/plots/climate space plot sensible heat flux.png"),
+    width = aes.canvas$width*100,
+    height = aes.canvas$height*100,
     pointsize = aes.canvas$point_size)
 
 # Empty Plot ####
 plot(x = x1,
-     y = y1,
+     y = y2,
      xlab = "Distance (km)",
-     ylab = "Snowfall (SWE)",
+     ylab = "Surface Sensible Heat Flux (Jm-2)",
      xlim = c(0, 250),
-     ylim = c(0, 0.0035),
+     ylim = c(-3200000, 1000000),
      yaxs = "i",
      xaxs = "i",
      type = "n",
@@ -53,7 +60,7 @@ function.plot_seasons <- function(data_x, data_y, err, mdl, point_shape) {
          y = data_y,
          cex = aes.symbols$datapoint_size_mid,
          pch = point_shape,
-         col = aes.colour$transluscent_blue1)
+         col = aes.colour$transluscent_tangerine1)
   
   arrows(x0 = data_x,
          x1 = data_x,
@@ -62,18 +69,17 @@ function.plot_seasons <- function(data_x, data_y, err, mdl, point_shape) {
          length = 0.01,
          angle = 90,
          code = 3,
-         col = aes.colour$transluscent_blue1,
+         col = aes.colour$transluscent_tangerine1,
          lty = "solid",
          lwd = aes.canvas$line_width)
   
-  
   # Regression ####
   clip(x1 = min(data_x), x2 = max(data_x),
-       y1 = 0, y2 = 99999)
+       y1 = -9999999999, y2 = 99999999999999)
   prediction <- predict(mdl, interval = "predict")
   ix <- sort(data_x, index.return=T)$ix
-  lines(data_x[ix], prediction[ix , 1], col = aes.colour$solid_blue, lwd = 2)
-  polygon(c(rev(data_x[ix]), data_x[ix]), c(rev(prediction[ix, 3]), prediction[ix, 2]), col = aes.colour$transluscent_blue2, border = NA)
+  lines(data_x[ix], prediction[ix , 1], col = aes.colour$solid_tangerine, lwd = 2)
+  polygon(c(rev(data_x[ix]), data_x[ix]), c(rev(prediction[ix, 3]), prediction[ix, 2]), col = aes.colour$transluscent_tangerine2, border = NA)
   
 }
 
@@ -87,13 +93,16 @@ box(bty = "l", lwd = aes.canvas$line_width)
 
 par(cex = 0.8)
 
-axis(side = 2, at = seq(0, 0.0035, by = 0.001), lwd = aes.canvas$line_width)
-axis(side = 2, at = seq(0, 0.0035, by = 0.0005), tick = TRUE, labels = FALSE, lwd = aes.canvas$tick_mark_minor_width, tcl = aes.canvas$tick_mark_minor_height)
+axis(side = 2, at = seq(-3000000, 1000000, by = 500000), lwd = aes.canvas$line_width)
+axis(side = 2, at = seq(-3200000, 1000000, by = 100000), tick = TRUE, labels = FALSE, lwd = aes.canvas$tick_mark_minor_width, tcl = aes.canvas$tick_mark_minor_height)
 
 axis(side = 1, at = c(0, 50, 100, 150, 200, 250), lwd = aes.canvas$line_width)
 axis(side = 1, at = seq(0, 250, by = 10), tick = TRUE, labels = FALSE, lwd = aes.canvas$tick_mark_minor_width, tcl = aes.canvas$tick_mark_minor_height)
 
+# zero line
+abline(h = 0)
+
 # Close SVG ####
 dev.off()
 
-browseURL(url = "~/snowlines/outputs/climate space/plots/climate space plot.svg")
+browseURL(url = "~/snowlines/outputs/climate space/plots/climate space plot sensible heat flux.png")
