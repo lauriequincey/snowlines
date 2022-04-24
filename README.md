@@ -22,7 +22,7 @@ Resolve snowlines without any code, 'anywhere' in the world, in a matter of minu
 Note:
 - The end result from running this produces a red coloured snow-edge.
 - Glaciers and ice caps are masked, however, an unmasked snow-edge is also available in the map layers.
-- You will likely have to zoom the map viewer to see the snow-edge result in full detail if you are analysing larger than a local area. Why? - Earth Engine analyses are run to the output scale, not input scale. See: https://developers.google.com/earth-engine/guides/scale.
+- You will likely have to zoom the map viewer to see the snow-edge result in full detail if you are analysing larger than a local area. Why? - Earth Engine analyses are run to the output scale, not input scale. See: https://developers.google.com/earth-engine/guides/scale and https://developers.google.com/earth-engine/guides/projections.
 
 ## Analysis Code
 Analysis scripts can be found under the "analysis" folder. They are written in R (v4.1.1).
