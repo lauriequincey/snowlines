@@ -18,7 +18,7 @@ Clicking the above link will redirect to the Earth Engine java script code edito
 [Go to: Snowlines Beta Application](https://lauriequincey.users.earthengine.app/view/snowlines-beta)
 
 Resolve snowlines without any code, 'anywhere' in the world, in a matter of minutes.
-iatioj
+
 Note:
 - The end result from running this produces a red coloured snow-edge.
 - Glaciers and ice caps are masked, however, an unmasked snow-edge is also available in the map layers.
