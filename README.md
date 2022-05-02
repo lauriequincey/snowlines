@@ -19,7 +19,7 @@ Clicking the above link will redirect to the Earth Engine java script code edito
 
 Resolve snowlines without any code, 'anywhere' in the world, in a matter of minutes.
 
-As the original algorithm was created for use in Norway, performance in other places of the world varies. For example, testing in British Columbia, Canada reveals an increase in non-snow covered arêtes produces more noisy snow-edge data. Still, an idea of snowline altitude is produced. 
+As the original algorithm was created for use in Norway, performance in other places of the world varies. For example, testing in British Columbia, Canada reveals an increase in non-snow covered arêtes connected to snowfree valleys produces more noisy snow-edge data. Still, an idea of snowline altitude is produced. 
 
 Note:
 - The end result from running this produces a red coloured snow-edge.
