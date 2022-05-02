@@ -1,5 +1,5 @@
 # Snowlines
-A project to delineate off-glacial mountain snowline altitudes at 30m resolution using Landsats 4-8 and compare to climate/meteorology (ERA5 Land Hourly Reanalysis) both through space and time. Specifically, this project looks at the Southern Norwegian mountains and tests the wider applicability of the linear spectral unmixing-based algorithm to Alaska. All scripts, however, will work 'anywhere' in world - wherever the datasets can take you. In the spirit of science, all of the code is openly accessable. The project is split between processing imagery and climate data on Google Earth Engine and data analysis, statistics, and graphing in R.
+A project to delineate off-glacial mountain snowline altitudes at 30m resolution using Landsats 4-8 and compare to climate/meteorology (ERA5 Land Hourly Reanalysis) both through space and time. Specifically, this project looks at the Southern Norwegian mountains and tests the wider applicability of the linear spectral unmixing-based algorithm to Canada. All scripts, however, will work 'anywhere' in world - wherever the datasets can take you, however performance is not guaranteed. In the spirit of science, all of the code is openly accessable. The project is split between processing imagery and climate data on Google Earth Engine and data analysis, statistics, and graphing in R.
 
 ## Earth Engine Code
 [Go to: Earth Engine Repository](https://code.earthengine.google.com/?accept_repo=users/lauriequincey/snowlines)
@@ -18,6 +18,8 @@ Clicking the above link will redirect to the Earth Engine java script code edito
 [Go to: Snowlines Beta Application](https://lauriequincey.users.earthengine.app/view/snowlines-beta)
 
 Resolve snowlines without any code, 'anywhere' in the world, in a matter of minutes.
+
+As the original algorithm was created for use in Norway, performance in other places of the world varies. For example, testing in British Columbia, Canada reveals an increase in non-snow covered arêtes produces more noisy snow-edge data. Still, an idea of snowline altitude is produced. 
 
 Note:
 - The end result from running this produces a red coloured snow-edge.
