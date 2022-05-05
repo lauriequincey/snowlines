@@ -1,3 +1,47 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var transect_line_2 = 
+    /* color: #d63000 */
+    /* shown: false */
+    ee.Geometry.LineString(
+        [[-148.71828665243575, 59.94611680002347],
+         [-148.71828665243575, 62.31075109402313]]),
+    transect_line_3 = 
+    /* color: #98ff00 */
+    /* shown: false */
+    ee.Geometry.LineString(
+        [[-123.75156923273535, 49.456371600521656],
+         [-121.98826356867285, 50.791033961457465]]),
+    transect_line_4 = 
+    /* color: #0b4a8b */
+    /* shown: false */
+    ee.Geometry.LineString(
+        [[-125.1806201815911, 50.49339914710237],
+         [-123.7963428378411, 51.444653514526614]]),
+    geometry = 
+    /* color: #d63000 */
+    /* shown: false */
+    ee.Geometry.LineString(
+        [[-133.75595819268256, 57.57135468488486],
+         [-131.41822423026372, 58.29055254935116]]),
+    geometry2 = 
+    /* color: #98ff00 */
+    /* shown: false */
+    ee.Geometry.LineString(
+        [[-126.74863274790953, 54.879059293615974],
+         [-130.533422786972, 53.76422184954276]]),
+    geometry3 = 
+    /* color: #0b4a8b */
+    /* shown: false */
+    ee.Geometry.LineString(
+        [[-130.56968569398413, 53.7641439884147],
+         [-126.74644350648414, 54.8884631386616]]),
+    geometry4 = 
+    /* color: #d63000 */
+    /* shown: false */
+    ee.Geometry.LineString(
+        [[-129.38133630488483, 54.120868514300206],
+         [-129.3521538708028, 54.13193378840717]]);
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
 /** Transect Geometry **/
 
 // Declare Transect Length with Line Geometry
@@ -5,6 +49,8 @@ var transect_line = ee.Geometry.LineString(
   [[4.88,  61.7],
    [9.13,   61.7]]
   );
+
+var transect_line = geometry3
 
 // Declare Transect Width
 // Info: Units in metres
@@ -23,6 +69,11 @@ var transect = ee.Geometry.Polygon({
   geodesic: true,
 });
 Map.centerObject(transect);
+
+Export.table.toDrive({
+  collection: ee.FeatureCollection(transect),
+  fileNamePrefix: "transect2",
+  fileFormat: "SHP"})
 
 /** Curate Imagery Collection **/
 // Input Date
@@ -69,7 +120,9 @@ Map.centerObject(transect);
 //var start_date = ee.Date('2018-06-02'); // at 16 days - 7: yes, 8: yes            7 days 7: yes, 8: yes         y  5 days for full clear
 //var start_date = ee.Date('2019-06-27'); // at 16 days - 7: yes, 8: no             7 days 7: no, 8: no           y  16 days for full clear
 //var start_date = ee.Date('2020-06-27'); // at 16 days - 7: no, 8: yes             7 days 7: no, 8: yes          y  8 days for full clear
-var start_date = ee.Date('2021-07-08'); // at 16 days - 7: no, 8: yes             7 days 7: no, 8: no           y  16 days for full clear
+//var start_date = ee.Date('2021-07-08'); // at 16 days - 7: no, 8: yes             7 days 7: no, 8: no           y  16 days for full clear
+
+var start_date = ee.Date('2021-07-01');
 
 // Create a date range from this start date by using start date and advancing it by 13 days to find the end date.
 var date_range = ee.DateRange(start_date, start_date.advance(16, 'day'));
@@ -81,7 +134,7 @@ var date_range = ee.DateRange(start_date, start_date.advance(16, 'day'));
 //                Landsat 5: '1984-01-01', '2012-05-05'
 //                Landsat 7: '1999-01-01', '2021-07-31'
 //                Landsat 8: '2013-04-11', '2021-08-14'
-var satellite_name = 'Landsat_5';
+var satellite_name = 'Landsat_8';
 
 // Import Imagery Based on Date and Satellite Selection
 var collections = ee.Dictionary([
@@ -648,6 +701,9 @@ var results = collection.map(function(image) {
 });
 Map.addLayer(transect, {}, 'Transect');
 Map.addLayer(ee.FeatureCollection(results.flatten()).draw({color: 'Red', pointRadius: 0, strokeWidth: 1}), {},'Snow-edge Data Points', 1, 1);
+
+Map.addLayer(ee.FeatureCollection(results.flatten()).draw({color: 'Red', pointRadius: 2, strokeWidth: 0}), {},'Snow-edge Data Points', 1, 1);
+
 print('Number of snowline pixels/points found:');
 print(results.flatten().size());
 

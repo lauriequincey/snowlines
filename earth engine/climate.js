@@ -17,7 +17,7 @@ var transect = ee.Geometry.Polygon({
 });
 
 /** Date USER INPUT**/
-var year = ee.Date('1981'); //<-- Enter year
+var year = ee.Date('1993'); //<-- Enter year
 var clientside_year = year.get('year').getInfo();
 
 /** Import Climate **/
@@ -39,7 +39,7 @@ var era5land_autumn = ee.ImageCollection('ECMWF/ERA5_LAND/HOURLY')
   .filterDate(ee.DateRange(ee.Date.fromYMD(year.get('year').subtract(1), 9, 01), ee.Date.fromYMD(year.get('year'), 11, 30)));
 
 /** Pick Season and Reduce USER INPUT**/
-var era5_season = era5land_winter; //<-- Enter season. Seasons: "summer", "winter", "spring", "autumn". Format: "era5land_winter" (no caps)  
+var era5_season = era5land_spring; //<-- Enter season. Seasons: "summer", "winter", "spring", "autumn". Format: "era5land_winter" (no caps)  
 var climate_mean = era5_season.reduce(ee.Reducer.mean());
 var climate_stdev = era5_season.reduce(ee.Reducer.stdDev()).divide(era5_season.size().sqrt());
 var climate = climate_mean.addBands(climate_stdev);
@@ -49,16 +49,24 @@ var elevation = ee.ImageCollection("JAXA/ALOS/AW3D30/V3_2")
     .filterBounds(transect)
     .select(['DSM'], ['altitude'])
     .mosaic()
-    .reproject({crs: 'EPSG:4326', scale: 30}); // reproject so the mosaic is uniform for the terrain calculations. Necessary, see: https://developers.google.com/earth-engine/guides/projections#reprojecting
-var thresholded_elevation = elevation.gt(995).and(elevation.lt(1005)).selfMask();
+    .reproject({crs: 'EPSG:4326', scale: 30});
+//var thresholded_elevation = elevation.gt(995).and(elevation.lt(1005));
+//Map.addLayer(thresholded_elevation)
+var thresholded_elevation = elevation
+
+var thresholded_elevation = thresholded_elevation.setDefaultProjection({crs: "EPSG:4326", scale: 11132}).reduceResolution({reducer: ee.Reducer.mean(), bestEffort: true});
+Map.addLayer(thresholded_elevation)
+print(thresholded_elevation)
+
 var thresholded_elevation = thresholded_elevation.sampleRegions({ // turns each pixel into a point feature
     collection: transect,
     properties: null,
-    scale: 30,
+    scale: 11132,
     projection: null,
     tileScale: 1,
     geometries: true
   });
+Map.addLayer(thresholded_elevation)
 
   // Add Distances Along Transect from 
   var start_line = ee.Geometry.LineString([lt_coord, lb_coord]);
@@ -75,7 +83,7 @@ var thresholded_elevation = thresholded_elevation.sampleRegions({ // turns each 
 var environ = transect_distances.addBands(climate);
 var results =  environ.reduceRegions({
       collection: thresholded_elevation,
-      reducer: ee.Reducer.mean(), // there is only 1 value for each band becuase its already been averaged - it does nothing. Dont beleive me? change it to count and see for yourself.
+      reducer: ee.Reducer.mean(), // there is only 1 value for each band becuase its already been averaged - it does nothing.
       scale: 11132 // resolution of era5land
       });
 
@@ -88,4 +96,4 @@ var results =  environ.reduceRegions({
 //  fileFormat: 'CSV'
 //});
 
-print(results.getDownloadURL({format: "CSV", filename: 'climate_' + 'SEASON' + '_' + clientside_year})); // <-- Enter name of season here where it says "season". Make sure its in quotes. Can be named anything.
+print(results.getDownloadURL({format: "CSV", filename: 'climate_' + 'spring' + '_' + clientside_year})); // <-- Enter name of season here where it says "season". Make sure its in quotes. Can be named anything.

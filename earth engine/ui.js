@@ -381,7 +381,7 @@ function stop_drawing() {drawingTools.stop();
 /** Widgets **/
 // Title
 var label_start_title = ui.Label({
-    value: 'Snowline Finder (v1.2)',
+    value: 'Snowlines Application',
     style: {
       whiteSpace: 'pre',
       fontSize: '22px',
