@@ -9,8 +9,6 @@ err_upper <- data.snowlines_gradients$gradient_error_upper
 err_lower <- data.snowlines_gradients$gradient_error_lower
 
 mdl <- lm(y ~ x)
-mdl_plus_err <- data.snowlines_rsla$plus_error
-mdl_minus_err <- data.snowlines_rsla$minus_error
 
 # Open SVG ####
 svg(filename = paste0("~/snowlines/outputs/snowline gradient/snowline gradients.svg"),
@@ -21,10 +19,10 @@ svg(filename = paste0("~/snowlines/outputs/snowline gradient/snowline gradients.
 # Plot ####
 plot(x = x,
      y = y,
-     xlab = "Time",
-     ylab = paste("Gradient (m km"^"-1"*")"),
+     xlab = "Year",
+     ylab = expression(text = paste("Gradient (m km"^"-1"*")")),
      xlim = c(473299200, 1640044800),
-     ylim = c(3, 7),
+     ylim = c(2.8, 7),
      yaxs = "i",
      xaxs = "i",
      type = "n",
@@ -51,13 +49,13 @@ points(x = x,
 
 # Error Bars ####
 arrows(x0 = x,
-       y0 = y + err_upper,
+       y0 = err_upper,
        x1 = x,
-       y1 = y - err_lower,
+       y1 = err_lower,
        length = 0.01,
        angle = 90,
        code = 3,
-       col = aes.colour$solid_salmon,
+       col = aes.colour$solid_black,
        lty = "solid",
        lwd = aes.canvas$line_width)
 
@@ -82,4 +80,4 @@ axis(side = 1, at = seq(347155200, 1640995200, by = 31536000), tick = TRUE, labe
 # Close SVG ####
 dev.off()
 
-browseURL(url = "~/snowlines/outputs/snowline rsla/rsla plot.svg")
+browseURL(url = "~/snowlines/outputs/snowline gradient/snowline gradients.svg")

@@ -127,8 +127,8 @@ summary(lm(subset$landsat_snow_cover_percentage ~ subset$terra_snow_cover_percen
 
 
 # MAE of Majority Snowline Imagery Sun Elevations 
-sun_threshold_upper <- 52
-sun_threshold_lower <- 45
+sun_threshold_upper <- mean(data.sun$sun_elevations) + sd(data.sun$sun_elevations)
+sun_threshold_lower <- mean(data.sun$sun_elevations) - sd(data.sun$sun_elevations)
 mae_snowline_majority <- mean(subset(data.validation, data.validation$sun_elevation > sun_threshold_lower & data.validation$sun_elevation < sun_threshold_upper)$landsat_snow_cover_percentage) - mean(subset(data.validation, data.validation$sun_elevation > sun_threshold_lower & data.validation$sun_elevation < sun_threshold_upper)$terra_snow_cover_percentage)
 
 # Regression of Majority Snowline Imagery Sun Elevations

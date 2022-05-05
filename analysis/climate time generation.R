@@ -3,7 +3,7 @@ rm(list = ls())
 while (dev.cur() > 1) dev.off()
 
 # Import ####
-data.climate <- readRDS("~/snowlines/data/data.climate.rds")
+data.climate <- readRDS("~/snowlines/data/data.climate_converted.rds")
 
 # Manipulation ####
 # Remove unwanted columns

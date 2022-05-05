@@ -20,7 +20,7 @@ aes.symbols <- list("datapoint_shape"        = 16,
                     "datapoint_shape_spring" = 18,
                     "datapoint_size_big"     = 20,
                     "datapoint_size_big2"    = 1.5,
-                    "datapoint_size_mid"     = 0.8,
+                    "datapoint_size_mid"     = 0.5,
                     "datapoint_size_small"   = 0.2)
   
 # Colours ####
@@ -45,11 +45,12 @@ aes.colour <- list("solid_black"             = rgb(red = 0,   green = 0,   blue 
                    "transluscent_tangerine1" = rgb(red = 217, green = 143, blue = 76,  alpha = 3,   maxColorValue = 255),
                    "transluscent_tangerine2" = rgb(red = 217, green = 143, blue = 76,  alpha = 50,  maxColorValue = 255),
                    "ramp_heat"               = colorRampPalette(colors = c(rgb(red = 250, green = 216, blue = 94,  alpha = 10, maxColorValue = 255),
+                                                                           rgb(red = 250, green = 216, blue = 94,  alpha = 10, maxColorValue = 255),
                                                                            rgb(red = 217, green = 143, blue = 76,  alpha = 10, maxColorValue = 255),
                                                                            rgb(red = 240, green = 108, blue = 97,  alpha = 10, maxColorValue = 255),
                                                                            rgb(red = 212, green = 76, blue = 217,  alpha = 10, maxColorValue = 255),
                                                                            rgb(red = 125, green = 88, blue = 252,  alpha = 10, maxColorValue = 255)),
-                                                                bias = 2,
+                                                                bias = 1.5,
                                                                 interpolate = c("linear"),
                                                                 alpha = TRUE))
 

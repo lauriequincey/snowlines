@@ -18,7 +18,7 @@ svg(filename = paste0("~/snowlines/outputs/snowline rsla/rsla plot.svg"),
 # Plot ####
 plot(x = x,
      y = y,
-     xlab = "Time",
+     xlab = "Year",
      ylab = "Altitude (m)",
      xlim = c(473299200, 1640044800),
      ylim = c(1250, 1750),

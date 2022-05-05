@@ -28,8 +28,8 @@ axis(side = 1, at = seq(0, 48, 1.2) - 0.5, tick = TRUE, labels = FALSE, line = -
 
 axis(side = 2, at = seq(1, 22, 2), tick = TRUE, labels = FALSE, line = 0, lwd = aes.canvas$tick_mark_minor_width, tcl = aes.canvas$tick_mark_minor_height)
 
-mtext(text = "Date", side = 1, line = 2.8)
-mtext(text = "no. of Unique Quality Images", side = 2, line = 2.8)
+mtext(text = "Year", side = 1, line = 3)
+mtext(text = "no. of Unique Quality Images", side = 2, line = 3)
 
 # Close SVG ####
 dev.off()

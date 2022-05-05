@@ -84,10 +84,12 @@ par(cex = 0.8)
 axis(side = 2,
      at = c(0, 500, 1000, 1500, 2000, 2500),
      lwd = aes.canvas$line_width)
+axis(side = 2, at = seq(0, 2500, by = 100), tick = TRUE, labels = FALSE, lwd = aes.canvas$tick_mark_minor_width, tcl = aes.canvas$tick_mark_minor_height)
 
 axis(side = 1,
      at = c(0, 50, 100, 150, 200, 250),
      lwd = aes.canvas$line_width)
+axis(side = 1, at = seq(0, 250, by = 10), tick = TRUE, labels = FALSE, lwd = aes.canvas$tick_mark_minor_width, tcl = aes.canvas$tick_mark_minor_height)
 
 # Close SVG ####
 dev.off()

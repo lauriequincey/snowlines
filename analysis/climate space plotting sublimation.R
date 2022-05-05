@@ -28,16 +28,16 @@ err4 <- data.climate$`2018`$spring_snow_evaporation_stdDev
 mdl4 <- lm(y4 ~ poly(x4, 3))
 
 # Open SVG ####
-#svg(filename = paste0("~/snowlines/outputs/climate space/plots/climate space plot temperature.svg"),
-#    width = aes.canvas$width,
-#    height = aes.canvas$height,
-#    pointsize = aes.canvas$point_size)
+svg(filename = paste0("~/snowlines/outputs/climate space/plots/climate space plot sublimation.svg"),
+    width = aes.canvas$width,
+    height = aes.canvas$height,
+    pointsize = aes.canvas$point_size)
 
 # Open PNG ####
-png(filename = paste0("~/snowlines/outputs/climate space/plots/climate space plot sublimation.png"),
-    width = aes.canvas$width*100,
-    height = aes.canvas$height*100,
-    pointsize = aes.canvas$point_size)
+#png(filename = paste0("~/snowlines/outputs/climate space/plots/climate space plot sublimation.png"),
+#    width = aes.canvas$width*100,
+#    height = aes.canvas$height*100,
+#    pointsize = aes.canvas$point_size)
 
 # Empty Plot ####
 plot(x = x1,
@@ -106,4 +106,4 @@ abline(h = 0)
 # Close SVG ####
 dev.off()
 
-browseURL(url = "~/snowlines/outputs/climate space/plots/climate space plot sublimation.png")
+browseURL(url = "~/snowlines/outputs/climate space/plots/climate space plot sublimation.svg")

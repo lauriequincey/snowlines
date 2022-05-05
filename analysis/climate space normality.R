@@ -89,7 +89,7 @@ for(i in names(data.climate)) {
   data <- data[, c(grepl("mean", colnames(data)) | grepl("distance", colnames(data)))]
   
   # Open PDF
-  raster_pdf(paste0("~/snowlines/outputs/spatial climate/normality/", 'climate normality ', i, ".pdf"))
+  raster_pdf(paste0("~/snowlines/outputs/climate space/normality/", 'climate normality ', i, ".pdf"))
   
   # For every column in the dataframe
   for(j in 1:ncol(data)) {

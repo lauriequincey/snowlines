@@ -16,6 +16,7 @@ function.get_pval <- function(model) {
 function.analyse_snowline <- function(altitude, distance) {
   
   ols_regression <- lm(altitude ~ distance)
+  pcor <- cor.test(x = distance, y = altitude)
   
   #print(distance)
   
@@ -24,7 +25,10 @@ function.analyse_snowline <- function(altitude, distance) {
                         "ols_adjr2" = summary(ols_regression)$adj.r.squared[1],
                         "ols_df" = summary(ols_regression)$df[2],
                         "ols_fstat" = summary(ols_regression)$fstatistic[1],
-                        "ols_pval" = function.get_pval(ols_regression))
+                        "ols_pval" = function.get_pval(ols_regression),
+                        "pcor_cor" = pcor$estimate,
+                        "pcor_pval" = pcor$p.value,
+                        "pcor_df" = pcor$parameter)
   
   return(outputs)
   
