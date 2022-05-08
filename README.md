@@ -1,5 +1,7 @@
 # Snowlines
-A project to delineate off-glacial mountain snowline altitudes at 30m resolution using Landsats 4-8 and compare to climate/meteorology (ERA5 Land Hourly Reanalysis) both through space and time. Specifically, this project looks at the Southern Norwegian mountains and tests the wider applicability of the linear spectral unmixing-based algorithm to Canada. All scripts, however, will work 'anywhere' in world - wherever the datasets can take you, however performance is not guaranteed. In the spirit of science, all of the code is openly accessable. The project is split between processing imagery and climate data on Google Earth Engine and data analysis, statistics, and graphing in R.
+A project to delineate off-glacial mountain snowline altitudes at 30m resolution using [Landsat](https://landsat.gsfc.nasa.gov/) 4-8 and compare to climate/meteorology ([ERA5 Land Hourly Reanalysis](https://confluence.ecmwf.int/display/CKB/ERA5-Land%3A+data+documentation)) both through space and time. Specifically, this project looks at the Southern Norwegian mountains and tests the wider applicability of the linear spectral unmixing-based algorithm to Canada. All scripts, however, will work 'anywhere' in world - wherever the datasets can take you, however performance is not guaranteed. In the spirit of science, all of the code is openly accessable. The project is split between processing imagery and climate data on [Google Earth Engine](https://earthengine.google.com/) and data analysis, statistics, and graphing in R.
+
+
 
 ## Earth Engine Code
 [Go to: Earth Engine Repository](https://code.earthengine.google.com/?accept_repo=users/lauriequincey/snowlines)
