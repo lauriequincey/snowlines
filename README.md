@@ -6,8 +6,6 @@ A project to delineate off-glacial mountain snowline altitudes at 30m resolution
 
 Clicking the above link will redirect to the Earth Engine java script code editor and will allow users to view and run the processing code of this study. Written on Earth Engine Code Editor Web-based IDE (JavaScript) v0.1.276. 
 
-**Within this Earth Engine repository the finished scripts can be found in the folder "snowlines". These are the same scripts pushed to this github repo ("earth engine" folder).**
-
 - "snowlines.js" contains the main algorithm for delineating snowlines from Landsats 4-8 at 30m resolution.
 - "climate.js" processes climate data from the ERA5 Land Hourly Reanalysis dataset at 11,312m latitudinal resolution for each season.
 - "validation.js" validates the algorithm's performance at recovering snow cover extent against the widely used MOD10A1 product (MODIS psuedo FSC snow cover product).
