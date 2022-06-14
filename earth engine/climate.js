@@ -1,99 +1,145 @@
-/** Generate Transect Geometry **/
-var transect_line = ee.Geometry.LineString(
-   [[4.88,  61.7],
-   [9.13,   61.7]]);
+/* Info
+ * Reterieve Climate Data
+ * This script retreives climate data from the era5land dataset for each meteorological season in any given year from within a polygon.
+ * Data are from the transect polygon generated in transect.js
+ * Distances along the transect polygon are incorporated too.
+ * Mean values are produced for each season with SEM. SEMs are of equal sample size (same hours of timesteps in each season).
+ */
 
-var transect_width = 40000; // larger transect lengths need smaller transect widths.
+/** Dependencies **/
+var module_transect = require("users/lauriequincey/snowlines:transect.js");
 
-var buffered_transect_line = transect_line.buffer(transect_width/2);
-var buffered_transect_line_coords = ee.List(buffered_transect_line.coordinates().get(0));
-var lt_coord = ee.Geometry.Point(ee.List(buffered_transect_line_coords.get(0)));  // left top
-var lb_coord = ee.Geometry.Point(ee.List(buffered_transect_line_coords.get(11))); // left bottom
-var rb_coord = ee.Geometry.Point(ee.List(buffered_transect_line_coords.get(13))); // right bottom
-var rt_coord = ee.Geometry.Point(ee.List(buffered_transect_line_coords.get(24))); // right top
-var transect = ee.Geometry.Polygon({
-  coords: [lt_coord, lb_coord, rb_coord, rt_coord],
-  geodesic: true,
-});
-
-/** Date USER INPUT**/
-var year = ee.Date('1993'); //<-- Enter year
+/** Year **/
+var year = ee.Date('2019'); //<-- Enter year, then run
 var clientside_year = year.get('year').getInfo();
 
-/** Import Climate **/
-var era5land_summer = ee.ImageCollection('ECMWF/ERA5_LAND/HOURLY')
-  .select(["temperature_2m", "snowfall", "snowmelt", "surface_latent_heat_flux", "surface_sensible_heat_flux", "surface_solar_radiation_downwards", "snow_evaporation"], ["summer_temperature_2m", "summer_snowfall", "summer_snowmelt", "summer_surface_latent_heat_flux", "summer_surface_sensible_heat_flux", "summer_surface_solar_radiation_downwards", "summer_snow_evaporation"])
-  .filterBounds(transect)
-  .filterDate(ee.DateRange(ee.Date.fromYMD(year.get('year'), 06, 01), ee.Date.fromYMD(year.get('year'), 8, 31)));
-var era5land_winter = ee.ImageCollection('ECMWF/ERA5_LAND/HOURLY')
-  .select(["temperature_2m", "snowfall", "snowmelt", "surface_latent_heat_flux", "surface_sensible_heat_flux", "surface_solar_radiation_downwards", "snow_evaporation"], ["winter_temperature_2m", "winter_snowfall", "winter_snowmelt", "winter_surface_latent_heat_flux", "winter_surface_sensible_heat_flux", "winter_surface_solar_radiation_downwards", "winter_snow_evaporation"])
-  .filterBounds(transect)
-  .filterDate(ee.DateRange(ee.Date.fromYMD(year.get('year').subtract(1), 12, 01), ee.Date.fromYMD(year.get('year'), 02, 28))); // why subtract 1 year? for any given year winter covers december of the previous year and jan-feb of the given year. Or does it cover december of the given year and jan-feb of the following year? As im dealing with snow, it 'sets' up the season for snowmelt. Therefore, the previous december is used.
-var era5land_spring = ee.ImageCollection('ECMWF/ERA5_LAND/HOURLY')
-  .select(["temperature_2m", "snowfall", "snowmelt", "surface_latent_heat_flux", "surface_sensible_heat_flux", "surface_solar_radiation_downwards", "snow_evaporation"], ["spring_temperature_2m", "spring_snowfall", "spring_snowmelt", "spring_surface_latent_heat_flux", "spring_surface_sensible_heat_flux", "spring_surface_solar_radiation_downwards", "spring_snow_evaporation"])
-  .filterBounds(transect)
-  .filterDate(ee.DateRange(ee.Date.fromYMD(year.get('year'), 03, 01), ee.Date.fromYMD(year.get('year'), 05, 28)));
-var era5land_autumn = ee.ImageCollection('ECMWF/ERA5_LAND/HOURLY')
-  .select(["temperature_2m", "snowfall", "snowmelt", "surface_latent_heat_flux", "surface_sensible_heat_flux", "surface_solar_radiation_downwards", "snow_evaporation"], ["autumn_temperature_2m", "autumn_snowfall", "autumn_snowmelt", "autumn_surface_latent_heat_flux", "autumn_surface_sensible_heat_flux", "autumn_surface_solar_radiation_downwards", "autumn_snow_evaporation"])
-  .filterBounds(transect)
-  .filterDate(ee.DateRange(ee.Date.fromYMD(year.get('year').subtract(1), 9, 01), ee.Date.fromYMD(year.get('year'), 11, 30)));
+/** Metrics (Land Elevation and Transect Distance) **/
 
-/** Pick Season and Reduce USER INPUT**/
-var era5_season = era5land_spring; //<-- Enter season. Seasons: "summer", "winter", "spring", "autumn". Format: "era5land_winter" (no caps)  
-var climate_mean = era5_season.reduce(ee.Reducer.mean());
-var climate_stdev = era5_season.reduce(ee.Reducer.stdDev()).divide(era5_season.size().sqrt());
-var climate = climate_mean.addBands(climate_stdev);
+// Import Land Surface Elevation 
+var metrics = ee.ImageCollection("JAXA/ALOS/AW3D30/V3_2")
+  .filterBounds(module_transect.transect)
+  .select(['DSM'], ['altitude'])
+  .mosaic() // mosaic as the JAXA data are an image collection not single raster.
+  
+// Reduce Elevation to scale of climate data by their mean
+  .setDefaultProjection({crs: "EPSG:4326", scale: 11132})
+  .reduceResolution({
+    reducer: ee.Reducer.mean(),
+    bestEffort: true
+  })
 
-/** Get Elevation Contour **/
-var elevation = ee.ImageCollection("JAXA/ALOS/AW3D30/V3_2")
-    .filterBounds(transect)
-    .select(['DSM'], ['altitude'])
-    .mosaic()
-    .reproject({crs: 'EPSG:4326', scale: 30});
-//var thresholded_elevation = elevation.gt(995).and(elevation.lt(1005));
-//Map.addLayer(thresholded_elevation)
-var thresholded_elevation = elevation
-
-var thresholded_elevation = thresholded_elevation.setDefaultProjection({crs: "EPSG:4326", scale: 11132}).reduceResolution({reducer: ee.Reducer.mean(), bestEffort: true});
-Map.addLayer(thresholded_elevation)
-print(thresholded_elevation)
-
-var thresholded_elevation = thresholded_elevation.sampleRegions({ // turns each pixel into a point feature
-    collection: transect,
+// Vectorise
+  .sampleRegions({
+    collection: module_transect.transect,
     properties: null,
-    scale: 11132,
+    scale: 11132, // at scale of climate data
     projection: null,
     tileScale: 1,
     geometries: true
+  })
+
+// Add Transect Distances (in km)
+  .map(function(point) {
+    
+    // How far is each point...
+    var distance = point
+      .geometry()
+      .distance(
+        // ... to the start of the transect (a line between the left hand coordinates)
+        ee.Geometry.LineString([module_transect.lt_coord, module_transect.lb_coord])
+      );
+    return point.set('distance', distance.divide(1000)); // in km
+  
   });
-Map.addLayer(thresholded_elevation)
 
-  // Add Distances Along Transect from 
-  var start_line = ee.Geometry.LineString([lt_coord, lb_coord]);
-  var transect_distances = thresholded_elevation.map(function(point) {
-    var distance = point.geometry().distance(start_line);
-    return point.set('distance', distance);
+/** Climate **/
+var climate_variables = ee.List([
+  'temperature_2m',
+  'snowfall',
+  'snowmelt',
+  'surface_latent_heat_flux',
+  'surface_sensible_heat_flux',
+  'surface_solar_radiation_downwards',
+  'snow_evaporation'
+]);
+
+var climate = ee.Dictionary({
+  
+  // Import
+  summer: ee.ImageCollection('ECMWF/ERA5_LAND/HOURLY')
+            .select(climate_variables)
+            .filterBounds(module_transect.transect)
+            .filterDate(ee.DateRange(ee.Date.fromYMD(year.get('year'), 06, 01), ee.Date.fromYMD(year.get('year'), 8, 31))),
+  winter: ee.ImageCollection('ECMWF/ERA5_LAND/HOURLY')
+            .select(climate_variables)
+            .filterBounds(module_transect.transect)
+            .filterDate(ee.DateRange(ee.Date.fromYMD(year.get('year').subtract(1), 12, 01), ee.Date.fromYMD(year.get('year'), 02, 28))),
+  spring: ee.ImageCollection('ECMWF/ERA5_LAND/HOURLY')
+            .select(climate_variables)
+            .filterBounds(module_transect.transect)
+            .filterDate(ee.DateRange(ee.Date.fromYMD(year.get('year'), 03, 01), ee.Date.fromYMD(year.get('year'), 05, 28))),
+  autumn: ee.ImageCollection('ECMWF/ERA5_LAND/HOURLY')
+            .select(climate_variables)
+            .filterBounds(module_transect.transect)
+            .filterDate(ee.DateRange(ee.Date.fromYMD(year.get('year').subtract(1), 9, 01), ee.Date.fromYMD(year.get('year'), 11, 30)))
+})
+
+  // Reduce seasons...
+  .map(function(key, season) {
+    
+    // ...to means
+    var season_mean = ee.ImageCollection(season).reduce(ee.Reducer.mean());
+    
+    // ...and SEMs
+    var season_sem = ee.ImageCollection(season).reduce(ee.Reducer.stdDev()).divide(ee.ImageCollection(season).size().sqrt())
+    
+      // Rename bands from the default "stdDev" to "_sem" as we calculate the standard error of the mean.
+      .rename(ee.Image(season_mean).bandNames().map(function(name){return ee.String(name).cat("_sem")}));
+    
+  return season_mean.addBands(season_sem);
+
+});
+
+/** Sample Climate at Metrics Points **/
+var output = climate.map(function(key, season){
+
+ return ee.Image(season)
+  .reduceRegions({
+    collection: metrics,
+    reducer: ee.Reducer.mean(),
+    scale: 11132
   });
-  var transect_distances = transect_distances.reduceToImage(['distance'], ee.Reducer.mean())
-    .rename('distance')
-    .divide(1000);
 
-/** Reduce to Elevation **/
-// Add environmental image and distances
-var environ = transect_distances.addBands(climate);
-var results =  environ.reduceRegions({
-      collection: thresholded_elevation,
-      reducer: ee.Reducer.mean(), // there is only 1 value for each band becuase its already been averaged - it does nothing.
-      scale: 11132 // resolution of era5land
-      });
+});
 
-/** Export USER INPUT **/
-//Export.table.toDrive({
-//  collection: results,
-//  description: 'climate_' + 'autumn' + '_' + clientside_year,
-//  folder: '' + clientside_year,
-//  fileNamePrefix: 'climate_' + 'autumn' + '_' + clientside_year,
-//  fileFormat: 'CSV'
-//});
+/** Export **/
 
-print(results.getDownloadURL({format: "CSV", filename: 'climate_' + 'spring' + '_' + clientside_year})); // <-- Enter name of season here where it says "season". Make sure its in quotes. Can be named anything.
+// Get list of each season name from the output (makes sure its in the right order) and pull to client side.
+var season_names_list = output.keys().getInfo();
+
+// We export each season individually to reduce file sizes and give more flexibility.
+// Client side loop through the output dictionary
+for (var i = 0; i < 4; i++) {
+  
+  // Get the season name for each iteration
+  var season_name = season_names_list[i];
+
+  // Print year and season
+  print(clientside_year + " " + season_name);
+  
+  // Select Season from season name and get download url, then print it
+  print(ee.FeatureCollection(output.get(season_name)).getDownloadURL({
+    format: "CSV",
+    filename: "climate_" + season_name + '_' + clientside_year
+  }));
+  
+  // Cloud
+  Export.table.toDrive({
+    collection: output.get(season_name),
+    description: "climate_" + season_name + '_' + clientside_year,
+    folder: "climate_" + clientside_year,
+    fileNamePrefix: "climate_" + season_name + '_' + clientside_year,
+    fileFormat: "CSV"
+  });
+  
+}
