@@ -1,10 +1,10 @@
 /** Dependencies **/
-var transectModule = require('users/lauriequincey/snowlines/transect.js');
-var imageryModule = require('users/lauriequincey/snowlines/imagery.js');
-var snowlinesModule = require('users/lauriequincey/snowlines/snowline.js');
-var climateModule = require('users/lauriequincey/snowlines/climate.js');
-var validationModule = require('users/lauriequincey/snowlines/validation.js');
-var sunModule = require('users/lauriequincey/snowlines/sun.js');
+var transectModule = require('users/lauriequincey/snowlines:transect.js');
+var imageryModule = require('users/lauriequincey/snowlines:imagery.js');
+var snowlinesModule = require('users/lauriequincey/snowlines:snowline.js');
+var climateModule = require('users/lauriequincey/snowlines:climate.js');
+var validationModule = require('users/lauriequincey/snowlines:validation.js');
+var sunModule = require('users/lauriequincey/snowlines:sun.js');
 
 /** Inputs **/
 var inputs = {
