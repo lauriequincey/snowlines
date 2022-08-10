@@ -32,9 +32,9 @@ exports.validation = function(transect) {
                     )
            )
    // Descending (daylight) path row tiles over the transect (https://landsat.usgs.gov/landsat_acq#convertPathRow) OR filter bounds to transect
-   //.filter(ee.Filter.or(ee.Filter.eq('WRS_PATH', 199), ee.Filter.eq('WRS_PATH', 200), ee.Filter.eq('WRS_PATH', 201)))
-   //.filter(ee.Filter.eq('WRS_ROW', 17))
-   .filterBounds(transect)
+   .filter(ee.Filter.or(ee.Filter.eq('WRS_PATH', 199), ee.Filter.eq('WRS_PATH', 200), ee.Filter.eq('WRS_PATH', 201)))
+   .filter(ee.Filter.eq('WRS_ROW', 17))
+   //.filterBounds(transect)
    // filter by sun elevation
    .filter(ee.Filter.gt('SUN_ELEVATION', 0))
    // No Clouds
@@ -144,67 +144,66 @@ exports.validation = function(transect) {
        .values();
     });
     
-  // landsatFSC
-  var landsatFSC = image
-    
-    /** Linear Spectral Unmixing **/
-    .select(['Blue', 'Green', 'Red', 'NIR', 'SWIR_1', 'SWIR_2', 'TIR'])
-    .unmix({
-      endmembers: endmembers,
-      sumToOne: true,
-      nonNegative: true
-    })
-    .rename('snow_component', 'vegetation_component', 'water_component', 'rock_component')
-  
-    /** Find 50% and above snow pixels **/
-    .select(['snow_component'], ['snow_extent'])
-    .gte(0.5);
-  
-  /** MODIS FSC **/
-  // Import
-  var terraFSC = ee.ImageCollection("MODIS/006/MOD10A1")
-    .filterDate(ee.Date(image.get('DATE_ACQUIRED')))
-    .filterBounds(image.geometry())
-    .select(['NDSI_Snow_Cover'], ['snow_extent'])
-    .mosaic()
-    .divide(100);
-    
-  /** Region Stats **/
-  
-  // Image footprint area
-  var geometryArea = image.geometry().area({maxError: 1});
-  
-  // Stats Function
-  function regionStats(fscImage){
-    
-      // Per pixel area
-      return ee.Number(fscImage.clip(image.geometry()).multiply(ee.Image.pixelArea())
+    // landsatFSC
+    var landsatFSC = image
       
-      // Snow cover area
-        .reduceRegion({
-          reducer: 'sum',
-          geometry: image.geometry(),
-          scale: 500
-        }).get('snow_extent'))
-        
-      // Percentage
-      .divide(geometryArea).multiply(100);
-  }
+      /** Linear Spectral Unmixing **/
+      .select(['Blue', 'Green', 'Red', 'NIR', 'SWIR_1', 'SWIR_2', 'TIR'])
+      .unmix({
+        endmembers: endmembers,
+        sumToOne: true,
+        nonNegative: true
+      })
+      .rename('snow_component', 'vegetation_component', 'water_component', 'rock_component')
+    
+      /** Find 50% and above snow pixels **/
+      .select(['snow_component'], ['snow_extent'])
+      .gte(0.5);
   
-  // Landsat Stats
-  var landsatSnowCoverPercentage = regionStats(landsatFSC);
+    /** MODIS FSC **/
+    // Import
+    var terraFSC = ee.ImageCollection("MODIS/006/MOD10A1")
+      .filterDate(ee.Date(image.get('DATE_ACQUIRED')))
+      .filterBounds(image.geometry())
+      .select(['NDSI_Snow_Cover'], ['snow_extent'])
+      .mosaic()
+      .divide(100);
 
-  // MODIS Stats
-  var terraSnowCoverPercentage = regionStats(terraFSC);
+    /** Region Stats **/
+    // Image footprint area
+    var geometryArea = image.geometry().area({maxError: 1});
+    
+    // Stats Function
+    function regionStats(fscImage){
+      
+        // Per pixel area
+        return ee.Number(fscImage.clip(image.geometry()).multiply(ee.Image.pixelArea())
+        
+        // Snow cover area
+          .reduceRegion({
+            reducer: 'sum',
+            geometry: image.geometry(),
+            scale: 500
+          }).get('snow_extent'))
+          
+        // Percentage
+        .divide(geometryArea).multiply(100);
+    }
+    
+    // Landsat Stats
+    var landsatSnowCoverPercentage = regionStats(landsatFSC);
   
-  /** Output **/
-  return ee.Feature(null, {
-    'geometryArea': geometryArea.divide(1e6),
-    'landsatSnowCoverPercentage': landsatSnowCoverPercentage,
-    'terraSnowCoverPercentage': terraSnowCoverPercentage,
-    'sunElevation': image.get('SUN_ELEVATION'),
-    'date': image.get('DATE_ACQUIRED')
-  });
+    // MODIS Stats
+    var terraSnowCoverPercentage = regionStats(terraFSC);
+  
+    /** Output **/
+    return ee.Feature(null, {
+      'geometryArea': geometryArea.divide(1e6),
+      'landsatSnowCoverPercentage': landsatSnowCoverPercentage,
+      'terraSnowCoverPercentage': terraSnowCoverPercentage,
+      'sunElevation': image.get('SUN_ELEVATION'),
+      'date': image.get('DATE_ACQUIRED')
+    });
     
   }));
 

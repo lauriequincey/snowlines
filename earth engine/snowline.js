@@ -1,6 +1,12 @@
+/* Info
+ * The snowlines algorithm
+ * Retreives snow edges and their altitudes and distances along the transect as a vector
+ * Also returns as it as a raster and the glaciers/ice caps, waterbodies, input imagery, and composite too. This is mainly for display purposes and troubleshooting.
+ */
+
 exports.snowlinesAlgorithm = function(transect, imageCollection, ltCoord, lbCoord) {
   
-  /** Glacier and Water Masks **/
+  /** Glacier and Water Masks **/ 
   // Glacer Mask
   var glacierMask = ee.FeatureCollection("GLIMS/current")
     .filter(ee.Filter.eq('line_type', 'glac_bound'))
@@ -86,97 +92,20 @@ exports.snowlinesAlgorithm = function(transect, imageCollection, ltCoord, lbCoor
     image = image.updateMask(image.select('TIR').reduce(ee.Reducer.count()));
     
     /** Cloud Masking **/
-    // https://developers.google.com/earth-engine/guides/image_texture
-    // Note: Why are there lots of little dots, that's not right! Zoom in and they go. It's a processig error from the way zoom and imagery processsing resolution are linked. The zoomed in version you see is the true product of the calculation, not the approximation when at low zoom levels.
-    // a) Threshold and Morphological Filter
-    //    How does this work? so the unmixing process produces the 50% and above snow pixels. This rarely picks the edges of clouds and dirty snow. (and if it does, its cos there is snow underneath!)
-    //    These surfaces are hard to distinguish and so the threhsolding below just gets rid of the main center of clouds.
-    //    An erosion-dilation morphological filter gets rid of small, miscalssifed non cloud bits (generally dirty snow pixels), then buffers the remaining actual cloud too inlcude its wispy edges
-    var wavebandCloudMask = image.select('SWIR_1').gt(11000) // no snow
-       .and(image.select('SWIR_2').gt(11000) // no snow
-         .and(image.select('Blue').gt(15000) // no veg/ground
-           .and(image.select('NIR').gt(19000) // no rocky ground
-           )
-         )
-       ).rename('cloudMask')
-       .focalMin({
-         radius: 120,
-         kernelType: 'circle',
-         units: 'meters',
-         iterations: 1
-       })
-       .focalMax({
-         radius: 150,
-         kernelType: 'circle',
-         units: 'meters',
-         iterations: 1
-       });
-      
-      // b) gclm Texture and Morphological filter
-      //    Works by finding the texture of the image and thresholding.
-      //    SWIR texture pulls cloud and some high ground near the snow edge
-      //    Red texture pulls cloud and snow but not any ground
-      //    Therefore, when adding them together, cloud can be isolated.
-      //    A dilation morphological filter buffers cloud too inlcude its wispy edges
-      // var glcmSWIR = image.select('SWIR_1').glcmTexture({
-      //   size: 4,
-      // }).select(['SWIR_1_savg'], ['glcmMask']);
-      // var glcmRed = image.select('Red').glcmTexture({
-      //   size: 4,
-      // }).select(['Red_savg'], ['glcmMask']);
-      
-      // var glcmCloudMask = glcmRed.add(glcmSWIR.multiply(3))
-      // .gt(160000)
-    var TirFilter = image.select('TIR');
-    var Swir1Filter = image.select('SWIR_1');
-    var glcmCloudMask = Swir1Filter.subtract(TirFilter.multiply(2))
-      .unmask()
-      .glcmTexture({
-        size: 4,
-      }).select(['SWIR_1_savg'], ['glcmMask'])
-      .gt(-120000)
-      // .focalMin({
-      //   radius: 100,
-      //   kernelType: 'circle',
-      //   units: 'meters',
-      //   iterations: 1
-      // })
+    var bandMath = image.expression(
+      '(SWIR2 - TIR) / (SWIR2 + TIR)',
+      {'SWIR2': image.select('SWIR_2'),
+       'TIR':  image.select('TIR')});
+    var glcm = bandMath.unitScale(-1, 1).multiply(255).toInt32().glcmTexture({size: 4}).select('SWIR_2_savg');
+    var cloudMask = glcm.gt(140)
       .focalMax({
-         radius: 180,
-         kernelType: 'circle',
-         units: 'meters',
-         iterations: 1
-       })
-      .rename('snow_extent'); // For masking snowCap
-      
-    // Merge cloud masks
-    var cloudMask = wavebandCloudMask.add(glcmCloudMask).gt(0);
-    
-    /** Shadow Mask **/
-    // Also gets water but thats okay because it will get masked anyway
-    // It's purpose is to mask out all shadows that overlap snow. Therefore, it can afford to be a little aggressive.
-    var shadowMaskNIR = image.select('NIR').lt(20000);
-    var shadowMaskSWIR1 = image.select('SWIR_1').lt(14000);
-    var shadowMaskSWIR2 = image.select('SWIR_2').lt(10000);
-    var shadowMaskRGB = image.select('Red').add(image.select('Green').add(image.select('Blue'))).lt(70000);
-    var shadowMask = shadowMaskNIR.add(shadowMaskSWIR1).add(shadowMaskSWIR2).add(shadowMaskRGB)
-      .eq(4)
-      .focalMin({
-        radius: 50,
+        radius: 180,
         kernelType: 'circle',
         units: 'meters',
         iterations: 1
       })
-      .focalMax({
-        radius: 150,
-        kernelType: 'circle',
-        units: 'meters',
-        iterations: 1
-      })
-      .rename('shadowMask');
-    
-    /** Combine Cloud and Cloud Shadows Masks **/
-    var cloudAndCloudShadowMask = shadowMask.not().add(cloudMask.not().selfMask().add(1).unmask()).rename('qualityBand'); // ??? Makes it heirarchical so that ground is preferred over shadows which are preferred over clouds.
+      .not()
+      .rename('cloudMask');
     
     /** Unix Time **/
     var time = ee.Image.constant(ee.Date(image.get('DATE_ACQUIRED')).millis())
@@ -184,12 +113,12 @@ exports.snowlinesAlgorithm = function(transect, imageCollection, ltCoord, lbCoor
       .rename('aqcuisition_time');
     
     /** Add Bands **/
-    return image.addBands([cloudMask, shadowMask, cloudAndCloudShadowMask, time]);
+    return image.addBands([cloudMask, time]);
   });
   
   // Cloudless Mosaic
-  var qualityMosaic = imageCollection.qualityMosaic('qualityBand');
-  var cloudlessMosaic = qualityMosaic.updateMask(qualityMosaic.select('qualityBand'));
+  var qualityMosaic = imageCollection.qualityMosaic('cloudMask');
+  var cloudlessMosaic = qualityMosaic.updateMask(qualityMosaic.select('cloudMask'));
   
   // Land Surface Indices
   var indices = ee.List([
@@ -209,7 +138,7 @@ exports.snowlinesAlgorithm = function(transect, imageCollection, ltCoord, lbCoor
        'SWIR1': cloudlessMosaic.select('SWIR_1'),
        'SWIR2': cloudlessMosaic.select('SWIR_2')}),
       
-    // Water (1 / MNDWI)
+    // Water (1 / MNDWI [Xu & Gao Combined])
     cloudlessMosaic.expression('1 / ((Green - SWIR) + (NIR - SWIR) / (Green + SWIR) + (NIR + SWIR))',
       {'Green': cloudlessMosaic.select('Green'),
        'NIR':   cloudlessMosaic.select('NIR'),
@@ -289,8 +218,7 @@ exports.snowlinesAlgorithm = function(transect, imageCollection, ltCoord, lbCoor
     
     /** Mask SnowCap **/
     var maskedSnowCap = snowCap
-      .updateMask(image.select('cloudMask').not())
-      .updateMask(image.select('shadowMask').not())
+      .updateMask(image.select('cloudMask'))
       .updateMask(glacierMask)
       .updateMask(waterMask);
     
@@ -327,7 +255,7 @@ exports.snowlinesAlgorithm = function(transect, imageCollection, ltCoord, lbCoor
     // add transect distances to the results table
     .map(function(feature) {
       return feature.set(
-        'distance',
+        'distance', 
         feature
           .geometry() // Get geom
           .distance(ee.Geometry.LineString([ltCoord.coordinates(), lbCoord.coordinates()])) // find distance to start line created from transect coords
@@ -345,7 +273,7 @@ exports.snowlinesAlgorithm = function(transect, imageCollection, ltCoord, lbCoor
     waterMask: waterMask,
     qualityMosaic: qualityMosaic,
     snowEdgeRaster: snowEdgeRaster,
-    snowEdgeVector: snowEdgeVector
+    snowEdgeVector: snowEdgeVector.select("[^snow_edge].*")
   };
   
 };
