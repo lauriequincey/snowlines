@@ -11,7 +11,7 @@ Clicking the above link will redirect to the Earth Engine java script code edito
 - "climate" processes climate data from the ERA5 Land Hourly Reanalysis dataset at 11,132m latitudinal resolution for each season.
 - "imagery" collects the imagery for the date, transect, and satellite provided.
 - "validation" validates the algorithm's performance at recovering snow cover extent against the widely used MOD10A1 product (MODIS psuedo FSC snow cover product).
-- "transect" generates the geodesic transect from a line geometry. Is referenced by other scripts. 
+- "transect" generates the geodesic transect from a line geometry.
 - "ui" contains the code for the snowlines application, see below.
 
 ## Snowlines Application
