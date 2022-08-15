@@ -17,7 +17,7 @@ Clicking the above link will redirect to the Earth Engine java script code edito
 ## Snowlines Application
 [Go to: Snowlines Application](https://lauriequincey.users.earthengine.app/view/snowlines)
 
-Resolve snowlines without any code in a matter of minutes for the study transect and experiment by using it anywhere in the world. As the original algorithm was created for use in Norway and in Summer, performance in other places of the world and seasons varies.
+Resolve snowlines without any code in a matter of minutes for the study transect and experiment by using it anywhere in the world. As the original algorithm was created for use in Norway and in summer, performance in other places of the world and seasons varies.
 
 ## Analysis Code
 Analysis scripts can be found under the "analysis" folder. They are written in R (v4.1.1).
