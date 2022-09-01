@@ -26,10 +26,10 @@ boot_output <- list()
 snowline_gradients = as.data.frame(do.call(what = rbind, args = lapply(X = data.snowlines, FUN = function(x) {
   
   # Time
-  aqcuisition_time_year = as.numeric(format(x = as.Date(as.POSIXct(x = x$unix_aqcuisition_time/1000, origin = "1970-01-01")), format = "%Y")[1])
-  aqcuisition_time_median = median(x$unix_aqcuisition_time/1000)
-  aqcuisition_time_min = min(x$unix_aqcuisition_time/1000)
-  aqcuisition_time_max = max(x$unix_aqcuisition_time/1000)
+  aqcuisition_time_year = as.numeric(format(x = as.Date(as.POSIXct(x = x$aqcuisition_time/1000, origin = "1970-01-01")), format = "%Y")[1])
+  aqcuisition_time_median = median(x$aqcuisition_time/1000)
+  aqcuisition_time_min = min(x$aqcuisition_time/1000)
+  aqcuisition_time_max = max(x$aqcuisition_time/1000)
   
   # Gradient
   gradient = unname(lm(x$altitude ~ x$distance)$coefficients[2])

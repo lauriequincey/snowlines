@@ -4,8 +4,7 @@ while (dev.cur() > 1) dev.off()
 
 # Import ####
 data.validation <- readRDS(file = "~/snowlines/data/data.validation.rds")
-data.sun <- readRDS(file = "~/snowlines/data/data.sun.rds")
-
+data.sun <- data.frame("sun" = unlist(lapply(X = readRDS(file = "~/snowlines/data/data.snowlines.rds"), FUN = function(x) {unique(as.numeric(as.character(substr(x$sun_elevation, 1, 200))))})))
 
 # Normality ####
 function.normality = function(x_data, y_data, title) {
@@ -80,8 +79,8 @@ function.normality = function(x_data, y_data, title) {
 pdf('~/snowlines/outputs/validation/validation normality.pdf')
 
 # Get Data
-x_data <- data.validation$terra_snow_cover_percentage
-y_data <- data.validation$landsat_snow_cover_percentage
+x_data <- data.validation$terraSnowCoverPercentage
+y_data <- data.validation$landsatSnowCoverPercentage
 title <- "Validation Normality"
 
 # Run Normality Function
@@ -91,10 +90,10 @@ dev.off()
 # Correlation Regression ####
 
 # Pearson's Correlation
-pearsons_correlation <- cor.test(x = data.validation$terra_snow_cover_percentage, y = data.validation$landsat_snow_cover_percentage)
+pearsons_correlation <- cor.test(x = data.validation$terraSnowCoverPercentage, y = data.validation$landsatSnowCoverPercentage)
 
 # Regression
-ols_regression <- lm(formula = landsat_snow_cover_percentage ~ terra_snow_cover_percentage, data = data.validation)
+ols_regression <- lm(formula = landsatSnowCoverPercentage ~ terraSnowCoverPercentage, data = data.validation)
 
 # Write to dataframe
 stat.validation <- data.frame(
@@ -108,33 +107,15 @@ stat.validation <- data.frame(
   "ols_fstat" = as.numeric(as.character(summary(ols_regression)$fstatistic[1]))) # ols_fstat,
 
 # Mean Absolute Error ####
-
-# MAE of All Validation Data
-mae_all <- mean(data.validation$landsat_snow_cover_percentage) - mean(data.validation$terra_snow_cover_percentage)
-
-# Regression of All Validation Data
-summary(lm(data.validation$landsat_snow_cover_percentage ~ data.validation$terra_snow_cover_percentage))
-
-
-# MAE of All Snowline Imagery Sun Elevations Range
-sun_threshold_upper <- max(data.sun$sun_elevations)
-sun_threshold_lower <- min(data.sun$sun_elevations)
-mae_snowline_all <- mean(subset(data.validation, data.validation$sun_elevation > sun_threshold_lower & data.validation$sun_elevation < sun_threshold_upper)$landsat_snow_cover_percentage) - mean(subset(data.validation, data.validation$sun_elevation > sun_threshold_lower & data.validation$sun_elevation < sun_threshold_upper)$terra_snow_cover_percentage)
-
-# Regression of All Snowline Imagery Sun Elevations Range
-subset <- subset(data.validation, data.validation$sun_elevation > sun_threshold_lower & data.validation$sun_elevation < sun_threshold_upper)
-summary(lm(subset$landsat_snow_cover_percentage ~ subset$terra_snow_cover_percentage))
-
-
-# MAE of Majority Snowline Imagery Sun Elevations 
-sun_threshold_upper <- mean(data.sun$sun_elevations) + sd(data.sun$sun_elevations)
-sun_threshold_lower <- mean(data.sun$sun_elevations) - sd(data.sun$sun_elevations)
-mae_snowline_majority <- mean(subset(data.validation, data.validation$sun_elevation > sun_threshold_lower & data.validation$sun_elevation < sun_threshold_upper)$landsat_snow_cover_percentage) - mean(subset(data.validation, data.validation$sun_elevation > sun_threshold_lower & data.validation$sun_elevation < sun_threshold_upper)$terra_snow_cover_percentage)
-
-# Regression of Majority Snowline Imagery Sun Elevations
-subset <- subset(data.validation, data.validation$sun_elevation > sun_threshold_lower & data.validation$sun_elevation < sun_threshold_upper)
-summary(lm(subset$landsat_snow_cover_percentage ~ subset$terra_snow_cover_percentage))
-
+getMae <- function(data, by, thresholdLow, thresholdHigh, col1, col2) {
+  sub = subset(data, by > thresholdLow & by < thresholdHigh)
+  print(nrow(sub))
+  #print(summary(lm( sub[, col2] / (sub[, col2] - sub[, col1]) )))
+  mae = mean(sub[, col2] - sub[, col1])
+}
+maeAll = mean(data.validation$landsatSnowCoverPercentage - data.validation$terraSnowCoverPercentage)
+maeImgAll = getMae(data.validation, data.validation$sunElevation, min(data.sun), max(data.sun), "landsatSnowCoverPercentage", "terraSnowCoverPercentage")
+maeImgSd = getMae(data.validation, data.validation$sunElevation, mean(data.sun$sun) - sd(data.sun$sun), mean(data.sun$sun) + sd(data.sun$sun), "landsatSnowCoverPercentage", "terraSnowCoverPercentage")
 
 # Save Outputs ####
 saveRDS(object = stat.validation, file = "~/snowlines/outputs/validation/stat.validation.rds")

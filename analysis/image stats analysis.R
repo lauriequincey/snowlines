@@ -29,7 +29,7 @@ blank_row <- c(0, 0, 0, 0)
 
 data.image_stats <- rbind(blank_row, blank_row, blank_row, data.image_stats)
 
-for(i in c(9, 15, 20, 28, 29, 30, 31)) {
+for(i in c(8, 14, 27, 28)) {
   data.image_stats <- rbind(data.image_stats[1:i,], blank_row, data.image_stats[-(1:i),])
 }
 
@@ -38,6 +38,9 @@ rownames(data.image_stats) <- 1982:2021
 
 # Rotate dataframe and make into matrix
 data.image_stats_matrix = data.matrix(t(data.image_stats))
+
+# How many images have been used?
+print(sum(data.image_stats$landsat_4 + data.image_stats$landsat_5 + data.image_stats$landsat_7+ data.image_stats$landsat_8))
 
 # Save ####
 saveRDS(object = data.image_stats, "~/snowlines/data/data.image_stats.rds")

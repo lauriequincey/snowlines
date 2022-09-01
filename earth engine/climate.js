@@ -3,6 +3,7 @@
  * Data are from the transect polygon generated in transect.js
  * Distances along the transect polygon are incorporated too.
  * Mean values are produced for each season with SEM. SEMs are of equal sample size (same hours of timesteps in each season).
+ * Created by Laurie Quincey, 2022.
  */
 
 exports.climate = function(transect, ltCoord, lbCoord, date) {

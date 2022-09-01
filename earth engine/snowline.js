@@ -1,7 +1,8 @@
 /* Info
- * The snowlines algorithm
- * Retreives snow edges and their altitudes and distances along the transect as a vector
+ * The snowlines algorithm.
+ * Retreives snow edges and their altitudes and distances along the transect as a vector.
  * Also returns as it as a raster and the glaciers/ice caps, waterbodies, input imagery, and composite too. This is mainly for display purposes and troubleshooting.
+ * Created by Laurie Quincey, 2022.
  */
 
 exports.snowlinesAlgorithm = function(transect, imageCollection, ltCoord, lbCoord) {

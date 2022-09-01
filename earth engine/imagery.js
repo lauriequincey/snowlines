@@ -1,7 +1,8 @@
 /* Info
- * Script to load landsat imagery
- * Selects bands and normalises across platforms
- * Filters to the satellite name input by the user and the date range (start date to start date + advance days)
+ * Script to load landsat imagery.
+ * Selects bands and normalises across platforms.
+ * Filters to the satellite name input by the user and the date range (start date to start date + advance days).
+ * Created by Laurie Quincey, 2022.
  */
 
 exports.imageryLoader = function(startDate, advanceDays, satelliteName, transect) {

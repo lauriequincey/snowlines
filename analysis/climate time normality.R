@@ -76,8 +76,8 @@ function.normality = function(x_data, y_data, title) {
 }
 
 # Run Normality Function ####
-# For Loop through data.climate_time, testing for normality on only the mean data, not the SEMs
-for(i in names(data.climate_time[, grepl("mean", colnames(data.climate_time))])) {
+# For Loop through data.climate_time, testing for normality on only the mean data, not the SEMs or the year column
+for(i in names(data.climate_time[, c(!grepl("sem", colnames(data.climate_time)) & !grepl("year", colnames(data.climate_time)))])) {
 
   # Get data for year
   data <- data.climate_time[[i]]

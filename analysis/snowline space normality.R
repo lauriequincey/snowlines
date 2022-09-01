@@ -67,14 +67,14 @@ function.normality = function(x_data, y_data, title) {
   text(x = 0.5, y = 0.1, labels = "Max Distance:")
   text(x = 0.5, y = 0.0, labels = x_max)
   
-  ## Quick Plot
-  #par(mfrow = c(1, 1))
-  #
-  #plot(x = x_data,
-  #     y = y_data,
-  #     xlim = c(0, 300),
-  #     ylim = c(0, 2500),
-  #     main = paste0("Quick Plot of ", title))
+  # Quick Plot
+  par(mfrow = c(1, 1))
+  
+  plot(x = x_data,
+       y = y_data,
+       xlim = c(0, 300),
+       ylim = c(0, 2500),
+       main = paste0("Quick Plot of ", title))
   
 }
 

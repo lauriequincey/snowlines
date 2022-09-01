@@ -1,6 +1,7 @@
 /* Info
  * This is a bulk download script to run all the study scripts and generate all the Norwegian study data at once.
  * Most exports should complete within 20mins.
+ * Created by Laurie Quincey, 2022.
  */
 
 /** Dependencies **/

@@ -43,7 +43,7 @@ function.analyse_climate <- function(climate, year) {
 }
 
 # Analyse ####
-stat.climate_time_analysis <- apply(X = data.climate_time[, grepl("mean", colnames(data.climate_time))],
+stat.climate_time_analysis <- apply(X = data.climate_time[, c(!grepl("sem", colnames(data.climate_time)) & !grepl("year", colnames(data.climate_time)))],
                                     MARGIN = 2,
                                     FUN = function(x) function.analyse_climate(x, data.climate_time$year))
 

@@ -43,6 +43,13 @@ stat.snowline_spatial_analysis <- lapply(X = data.snowlines,
 stat.snowline_spatial_analysis_melted <- do.call(what = rbind,
                                              args = lapply(X = stat.snowline_spatial_analysis,
                                                            FUN = function(x) {as.data.frame(x)}))
+
+# Get the 99th percentile of the translation error (remember to add 5)
+test = do.call(what = rbind,
+        args = data.snowlines)$altitude_translation_error
+
+quantile(x = test, probs = c(0.99))
+
 # Save ####
 saveRDS(file = "~/snowlines/outputs/snowline space/stat.snowline_spatial_analysis.rds", object = stat.snowline_spatial_analysis)
 saveRDS(file = "~/snowlines/outputs/snowline space/stat.snowline_spatial_analysis_melted.rds", object = stat.snowline_spatial_analysis_melted)

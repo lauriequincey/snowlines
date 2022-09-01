@@ -5,6 +5,7 @@
  * ...and calculates percentage snow cover within the landsat footprint for both this study algorithm and the MODIS product.
  * No inputs other than transect geometry from "transect.js" script.
  * Image filtering parameters can be changed in the "Imagery" section. E.g. images are filtered to cloud cover below 10%.
+ * Created by Laurie Quincey, 2022.
  */
  
 exports.validation = function(transect) {
@@ -174,7 +175,7 @@ exports.validation = function(transect) {
     var geometryArea = image.geometry().area({maxError: 1});
     
     // Stats Function
-    function regionStats(fscImage){
+    function regionStats(fscImage, scale){
       
         // Per pixel area
         return ee.Number(fscImage.clip(image.geometry()).multiply(ee.Image.pixelArea())
@@ -183,7 +184,8 @@ exports.validation = function(transect) {
           .reduceRegion({
             reducer: 'sum',
             geometry: image.geometry(),
-            scale: 500
+            scale: scale,
+            maxPixels: 40000000,
           }).get('snow_extent'))
           
         // Percentage
@@ -191,10 +193,10 @@ exports.validation = function(transect) {
     }
     
     // Landsat Stats
-    var landsatSnowCoverPercentage = regionStats(landsatFSC);
+    var landsatSnowCoverPercentage = regionStats(landsatFSC, 30);
   
     // MODIS Stats
-    var terraSnowCoverPercentage = regionStats(terraFSC);
+    var terraSnowCoverPercentage = regionStats(terraFSC, 500);
   
     /** Output **/
     return ee.Feature(null, {

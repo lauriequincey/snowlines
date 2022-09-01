@@ -5,6 +5,7 @@
  * Validation and bulk computation/download of data is in the bulkController script.
  * This script also visualises the snowline result and has the Canadian transect geometry used by the study.
  * Most exports should complete within 20mins.
+ * Created by Laurie Quincey, 2022.
  */
 
 /** Dependencies **/

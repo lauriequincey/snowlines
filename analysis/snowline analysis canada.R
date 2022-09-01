@@ -1,16 +1,10 @@
-# Reset ####
-rm(list = ls())
-while (dev.cur() > 1) dev.off()
+data.kitkatla <- read.csv("~/snowlines/upload/kitkatla/snowlinesSnowlineLandsat 8Date2021-07-01Days16.csv")
+saveRDS(data.kitkatla, "~/snowlines/data/data.kitkatla.rds")
 
-# Import ####
-data.snowlines <- readRDS("~/snowlines/data/data.snowlines.rds")
-
-# Prep ####
+# RSLA ####
 
 # Find the middle distance of all the years distance ranges
-middle_distance <- mean(do.call(what = rbind,
-                                args = lapply(data.snowlines, function(x) {return(median(x$distance))})
-))
+middle_distance <- median(data.kitkatla$distance)
 
 function.snowline_uncertainty <- function(data, altitude, aspect) {
   
@@ -19,12 +13,12 @@ function.snowline_uncertainty <- function(data, altitude, aspect) {
   
   # Declare Output Dataframe
   result <- na.omit(data.frame("binstart" = NA,
-                                   "mean_alt" = NA))
+                               "mean_alt" = NA))
   
   # Loop
   # For every aspect degree bin...
   for (k in aspect_ranges) {
-
+    
     high <- k + 3
     low <- k
     bin <- subset(data, data$aspect > low & data$aspect < high)
@@ -34,7 +28,7 @@ function.snowline_uncertainty <- function(data, altitude, aspect) {
     
     # Add to Output Dataframe
     result[nrow(result) + 1, ] = c(low,
-                                           alt_mean)
+                                   alt_mean)
     
   }
   
@@ -100,9 +94,92 @@ function.rsla_generation <- function(data, altitude, distance, time, aspect, alt
 }
 
 # Generate rsla ####
-data.snowlines_rsla <- as.data.frame(do.call(what = rbind, args = lapply(X = data.snowlines, FUN = function(x) {
-  return(function.rsla_generation(x, x$altitude, x$distance, x$aqcuisition_time, x$aspect, x$altitude_translation_error, x$altitude_base_error))
-})))
+data.kitkatla_rsla <- function.rsla_generation(data.kitkatla, data.kitkatla$altitude, data.kitkatla$distance, data.kitkatla$aqcuisition_time, data.kitkatla$aspect, data.kitkatla$altitude_translation_error, data.kitkatla$altitude_base_error)
 
 # Save ####
-saveRDS(file = "~/snowlines/data/data.snowlines_rsla.rds", object = data.snowlines_rsla)
+saveRDS(file = "~/snowlines/data/data.kitkatla_rsla.rds", object = data.kitkatla_rsla)
+data.kitkatla_rsla <- readRDS("~/snowlines/data/data.kitkatla_rsla.rds")
+
+# Plot ####
+
+# Reclassify ####
+x <- data.kitkatla$distance
+y <- data.kitkatla$altitude
+
+mdl <- lm(y ~ x)
+summary(mdl)
+mdl_plus_err <- data.kitkatla_rsla$plus_error
+mdl_minus_err <- data.kitkatla_rsla$minus_error
+
+# Open SVG ####
+svg(filename = paste0("~/snowlines/outputs/snowline space/plots/snowline kitkatla plot.svg"),
+    width = aes.canvas$width,
+    height = aes.canvas$height,
+    pointsize = aes.canvas$point_size)
+
+# Empty Plot ####
+plot(x = x,
+     y = y,
+     xlab = "Distance (km)",
+     ylab = "Altitude (m)",
+     xlim = c(0, 300),
+     ylim = c(0, 2700),
+     yaxs = "i",
+     xaxs = "i",
+     type = "n",
+     frame.plot = FALSE,
+     axes = FALSE)
+
+# Points ####
+points(x = x,
+       y = y,
+       cex = aes.symbols$datapoint_size_small,
+       pch = aes.symbols$datapoint_shape,
+       col = densCols(x = x,
+                      y = y,
+                      nbin = 2000,
+                      colramp = aes.colour$ramp_heat))
+
+# Regression ####
+clip(x1 = min(x), x2 = max(x),
+     y1 = min(y), y2 = max(y))
+abline(a = mdl$coefficients[1],
+       b = mdl$coefficients[2],
+       col = aes.colour$solid_black,
+       lwd = aes.canvas$line_width)
+
+# Regression Aspect Uncertainty ####
+clip(x1 = min(x), x2 = max(x),
+     y1 = min(y), y2 = max(y))
+abline(a = mdl$coefficients[1] + mdl_plus_err,
+       b = mdl$coefficients[2],
+       col = aes.colour$solid_black,
+       lwd = aes.canvas$line_width,
+       lty = "dashed")
+clip(x1 = min(x), x2 = max(x),
+     y1 = min(y), y2 = max(y))
+abline(a = mdl$coefficients[1] - mdl_minus_err,
+       b = mdl$coefficients[2],
+       col = aes.colour$solid_black,
+       lwd = aes.canvas$line_width,
+       lty = "dashed")
+
+# Axes ####
+box(bty = "l", lwd = aes.canvas$line_width)
+
+par(cex = 0.8)
+
+axis(side = 2,
+     at = c(0, 500, 1000, 1500, 2000, 2500, 3000),
+     lwd = aes.canvas$line_width)
+axis(side = 2, at = seq(0, 3000, by = 100), tick = TRUE, labels = FALSE, lwd = aes.canvas$tick_mark_minor_width, tcl = aes.canvas$tick_mark_minor_height)
+
+axis(side = 1,
+     at = c(0, 50, 100, 150, 200, 250, 300),
+     lwd = aes.canvas$line_width)
+axis(side = 1, at = seq(0, 300, by = 10), tick = TRUE, labels = FALSE, lwd = aes.canvas$tick_mark_minor_width, tcl = aes.canvas$tick_mark_minor_height)
+
+# Close SVG ####
+dev.off()
+
+browseURL(url = "~/snowlines/outputs/snowline space/plots/snowline kitkatla plot.svg")

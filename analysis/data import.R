@@ -8,12 +8,12 @@ while (dev.cur() > 1) dev.off()
 require(readxl)
 
 # Import Data
-data.Anestolen_443 <- read_excel("~/snowlines/upload/end of ablation season/Coverted and Cleaned Excel Files/Anestolen 443 Coverted and Cleaned.xlsx")
-data.FV614_Grytadalen_422 <- read_excel("~/snowlines/upload/end of ablation season/Coverted and Cleaned Excel Files/FV614 Grytadelen 422 Converted and Cleaned.xlsx")
-data.Jostedalen_Mjolversgrendi_305 <- read_excel("~/snowlines/upload/end of ablation season/Coverted and Cleaned Excel Files/Jostedalen - Mjolversgrendi 305 Converted and Cleaned.xlsx")
-data.Juvasshoe_1894 <- read_excel("~/snowlines/upload/end of ablation season/Coverted and Cleaned Excel Files/Juvasshoe 1894.xlsx")
-data.Myklebust_I_Breim_315 <- read_excel("~/snowlines/upload/end of ablation season/Coverted and Cleaned Excel Files/Myklebust I Breim 315.xlsx")
-data.Sognefjellet_snopute_nye_1425 <- read_excel("~/snowlines/upload/end of ablation season/Coverted and Cleaned Excel Files/Sognefjellet snopute (nye) 1425.xlsx")
+data.Anestolen_443 <- read_excel("~/snowlines/upload/end of ablation season/Anestolen 443 Coverted and Cleaned.xlsx")
+data.FV614_Grytadalen_422 <- read_excel("~/snowlines/upload/end of ablation season/FV614 Grytadelen 422 Converted and Cleaned.xlsx")
+data.Jostedalen_Mjolversgrendi_305 <- read_excel("~/snowlines/upload/end of ablation season/Jostedalen - Mjolversgrendi 305 Converted and Cleaned.xlsx")
+data.Juvasshoe_1894 <- read_excel("~/snowlines/upload/end of ablation season/Juvasshoe 1894.xlsx")
+data.Myklebust_I_Breim_315 <- read_excel("~/snowlines/upload/end of ablation season/Myklebust I Breim 315.xlsx")
+data.Sognefjellet_snopute_nye_1425 <- read_excel("~/snowlines/upload/end of ablation season/Sognefjellet snopute (nye) 1425.xlsx")
 
 # Merge
 data.snow_depth <- data.frame(
@@ -92,7 +92,7 @@ function.importer_cbind <- function(directory, year) {
 }
 
 # List of column names
-column_names <- c("altitude", "autumn_snow_evaporation_mean", "autumn_snow_evaporation_stdDev", "autumn_snowfall_mean", "autumn_snowfall_stdDev", "autumn_snowmelt_mean", "autumn_snowmelt_stdDev", "autumn_surface_latent_heat_flux_mean", "autumn_surface_latent_heat_flux_stdDev", "autumn_surface_sensible_heat_flux_mean", "autumn_surface_sensible_heat_flux_stdDev", "autumn_surface_solar_radiation_downwards_mean", "autumn_surface_solar_radiation_downwards_stdDev","autumn_temperature_2m_mean", "autumn_temperature_2m_stdDev", "distance", "spring_snow_evaporation_mean", "spring_snow_evaporation_stdDev", "spring_snowfall_mean", "spring_snowfall_stdDev", "spring_snowmelt_mean", "spring_snowmelt_stdDev", "spring_surface_latent_heat_flux_mean", "spring_surface_latent_heat_flux_stdDev", "spring_surface_sensible_heat_flux_mean", "spring_surface_sensible_heat_flux_stdDev", "spring_surface_solar_radiation_downwards_mean", "spring_surface_solar_radiation_downwards_stdDev", "spring_temperature_2m_mean", "spring_temperature_2m_stdDev", "summer_snow_evaporation_mean", "summer_snow_evaporation_stdDev", "summer_snowfall_mean", "summer_snowfall_stdDev", "summer_snowmelt_mean", "summer_snowmelt_stdDev", "summer_surface_latent_heat_flux_mean", "summer_surface_latent_heat_flux_stdDev", "summer_surface_sensible_heat_flux_mean", "summer_surface_sensible_heat_flux_stdDev", "summer_surface_solar_radiation_downwards_mean", "summer_surface_solar_radiation_downwards_stdDev", "summer_temperature_2m_mean"                     ,"summer_temperature_2m_stdDev"                   ,"winter_snow_evaporation_mean"                   ,"winter_snow_evaporation_stdDev"                 ,"winter_snowfall_mean"                           ,"winter_snowfall_stdDev"                         ,"winter_snowmelt_mean"                           ,"winter_snowmelt_stdDev", "winter_surface_latent_heat_flux_mean", "winter_surface_latent_heat_flux_stdDev", "winter_surface_sensible_heat_flux_mean", "winter_surface_sensible_heat_flux_stdDev", "winter_surface_solar_radiation_downwards_mean", "winter_surface_solar_radiation_downwards_stdDev", "winter_temperature_2m_mean", "winter_temperature_2m_stdDev")
+#column_names <- c("altitude", "autumn_snow_evaporation_mean", "autumn_snow_evaporation_stdDev", "autumn_snowfall_mean", "autumn_snowfall_stdDev", "autumn_snowmelt_mean", "autumn_snowmelt_stdDev", "autumn_surface_latent_heat_flux_mean", "autumn_surface_latent_heat_flux_stdDev", "autumn_surface_sensible_heat_flux_mean", "autumn_surface_sensible_heat_flux_stdDev", "autumn_surface_solar_radiation_downwards_mean", "autumn_surface_solar_radiation_downwards_stdDev","autumn_temperature_2m_mean", "autumn_temperature_2m_stdDev", "distance", "spring_snow_evaporation_mean", "spring_snow_evaporation_stdDev", "spring_snowfall_mean", "spring_snowfall_stdDev", "spring_snowmelt_mean", "spring_snowmelt_stdDev", "spring_surface_latent_heat_flux_mean", "spring_surface_latent_heat_flux_stdDev", "spring_surface_sensible_heat_flux_mean", "spring_surface_sensible_heat_flux_stdDev", "spring_surface_solar_radiation_downwards_mean", "spring_surface_solar_radiation_downwards_stdDev", "spring_temperature_2m_mean", "spring_temperature_2m_stdDev", "summer_snow_evaporation_mean", "summer_snow_evaporation_stdDev", "summer_snowfall_mean", "summer_snowfall_stdDev", "summer_snowmelt_mean", "summer_snowmelt_stdDev", "summer_surface_latent_heat_flux_mean", "summer_surface_latent_heat_flux_stdDev", "summer_surface_sensible_heat_flux_mean", "summer_surface_sensible_heat_flux_stdDev", "summer_surface_solar_radiation_downwards_mean", "summer_surface_solar_radiation_downwards_stdDev", "summer_temperature_2m_mean"                     ,"summer_temperature_2m_stdDev"                   ,"winter_snow_evaporation_mean"                   ,"winter_snow_evaporation_stdDev"                 ,"winter_snowfall_mean"                           ,"winter_snowfall_stdDev"                         ,"winter_snowmelt_mean"                           ,"winter_snowmelt_stdDev", "winter_surface_latent_heat_flux_mean", "winter_surface_latent_heat_flux_stdDev", "winter_surface_sensible_heat_flux_mean", "winter_surface_sensible_heat_flux_stdDev", "winter_surface_solar_radiation_downwards_mean", "winter_surface_solar_radiation_downwards_stdDev", "winter_temperature_2m_mean", "winter_temperature_2m_stdDev")
 
 # List of folder names
 list_of_years <- list.files("~/snowlines/upload/climate")
@@ -111,7 +111,7 @@ for(i in list_of_years) {
   temp_dataframe <- temp_dataframe[, !duplicated(colnames(temp_dataframe))]
   
   # Add to output list, removing altitudes, .geo, system index. 
-  data.climate[[(length(data.climate) + 1)]] <- na.omit(temp_dataframe)[c(grepl("mean", colnames(temp_dataframe)) | grepl("stdDev", colnames(temp_dataframe)) | grepl("distance", colnames(temp_dataframe)))]
+  data.climate[[(length(data.climate) + 1)]] <- na.omit(temp_dataframe)[c(grepl("mean", colnames(temp_dataframe)) | grepl("sem", colnames(temp_dataframe)) | grepl("distance", colnames(temp_dataframe)))]
   
   # Progress
   cat(paste0("\n", i, " complete"))
@@ -130,14 +130,10 @@ while (dev.cur() > 1) dev.off()
 # Validation Import ####
 
 # Read validation.csv
-data.validation <- read.csv("~/snowlines/upload/validation/validation.csv")[c(-1, -7)]
-
-# Read sun.csv
-data.sun <- read.csv("~/snowlines/upload/sun/sun.csv")[c(-1, -3)]
+data.validation <- read.csv("~/snowlines/upload/validation/snowlinesValidation.csv")[c(-1, -7)]
 
 # Save as RDS
 saveRDS(object = data.validation, file = "~/snowlines/data/data.validation.rds")
-saveRDS(object = data.sun, file = "~/snowlines/data/data.sun.rds")
 
 # Clean
 rm(list = ls())

@@ -2,7 +2,8 @@
  * This generates a geodesic transect from a line.
  * Why not use the rectangle draw tool? To my knowledge you can only draw a lat-long rectangle which cannot be rotated in any way. However, a line can be drawn in any direction.
  * Therefore, using a line geometry to draw a rectangle from allows rectangle geometries to be generated 'off-axis'.
- * The start of the transect (0 km distance is at the first-clicked point of the line. These are referred to as left-hand vertices)
+ * The start of the transect (0 km distance is at the first-clicked point of the line. These are referred to as left-hand vertices).
+ * Created by Laurie Quincey, 2022.
  */
 
 /** Generate Transect Function **/

@@ -43,7 +43,7 @@ function.analyse_gradient <- function(gradient, date) {
 }
 
 # Analyse ####
-stat.gradient_analysis <- function.analyse_rsla(data.snowlines_gradients$gradient, data.snowlines_gradients$aqcuisition_time_median)
+stat.gradient_analysis <- function.analyse_gradient(data.snowlines_gradients$gradient, data.snowlines_gradients$aqcuisition_time_median)
 
 # Melt from list to dataframe ####
 stat.gradient_analysis_melted <- do.call(what = rbind,

@@ -3,12 +3,12 @@ rm(list = ls())
 while (dev.cur() > 1) dev.off()
 
 # Import ####
-data.climate <- readRDS("~/snowlines/data/data.climate_converted.rds")
+data.climate <- readRDS("~/snowlines/data/data.climate.rds")
 
 # Prep ####
 # Select only means and distance columns (exclude SEM)
 data.climate_no_sem <- lapply(X = data.climate,
-                              FUN = function(x) {x[, c(grepl("mean", colnames(x)) | grepl("distance", colnames(x)))]})
+                              FUN = function(x) {x[, !grepl("sem", colnames(x))]})
 
 # Get pval from model function
 function.get_pval <- function(model) {
@@ -65,6 +65,7 @@ stat.climate_spatial_analysis <- lapply(X = data.climate_no_sem,
 
 # Save ####
 saveRDS(file = "~/snowlines/outputs/climate space/stat.climate_spatial_analysis.rds", object = stat.climate_spatial_analysis)
+saveRDS(file = "~/snowlines/outputs/climate space/stat.climate_spatial_analysis_melted.rds", object = do.call(rbind, do.call(rbind, do.call(cbind, stat.climate_spatial_analysis))))
 
 # Tool to extract a specific stat for all columns each year ####
 function.melt_stats <- function(dataframe, stat) {
@@ -75,8 +76,14 @@ function.melt_stats <- function(dataframe, stat) {
 
 stat.yearly_stat <- function.melt_stats(dataframe = stat.climate_spatial_analysis,
                                         stat = "ols_grad")
+int = stat.yearly_stat
+grad = stat.yearly_stat
+coastrange = mean(as.numeric(int$summer_temperature_mean) - as.numeric(int$winter_temperature_mean))
 
-mean(as.numeric(stat.yearly_stat$winter_temperature_2m_mean_converted))
+inlandrange = mean(as.numeric(grad$summer_temperature_mean)*225 + as.numeric(int$summer_temperature_mean) - as.numeric(grad$winter_temperature_mean)*225 + as.numeric(int$winter_temperature_mean))
+
+
+mean(as.numeric(stat.yearly_stat$summer_temperature_mean))
 sd(as.numeric(stat.yearly_stat$winter_snowfall_mean))
 
 
@@ -99,6 +106,11 @@ plot(x = data.climate_no_sem$`1981`$distance, y = data.climate_no_sem$`1981`$sum
 
 
 mean(stat.snowline_spatial_analysis_melted$ols_grad)
+
+x = do.call(rbind, lapply(X = data.climate_no_sem,
+       FUN = function(x) {max(x$summer_temperature_mean - x$winter_temperature_mean)}))
+mean(x)
+
 
 
 

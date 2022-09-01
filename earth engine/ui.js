@@ -1,3 +1,8 @@
+/* Info
+ * UI for snowlines algorithm and climate explorer.
+ * Created by Laurie Quincey, 2022.
+ */
+
 /** Maps **/
 var mapMain = ui.Map({
   center: { // Center map on Are, Sweden
@@ -703,15 +708,16 @@ ui.Map.Linker([mapMain, mapMini], "change-center");
 
 /** Aesthetics **/
 var colourCyan = "#88cce3";
-var colourGreen = "#56fc03";
 var colourBlack = "Black";
-var colourRed = "Red";
-var colourGrey = "#a3a3a3";
+var autumn = "#D66D72";
+var spring = "#9DDF8E";
+var summer = "#EEEA8E";
+var winter = "#6391BD";
 
 /** Input Components **/
 // Transect
 var drawTools = mapMain.drawingTools().setShown(false);
-drawTools.layers().add(ui.Map.GeometryLayer({geometries: [ee.Geometry.LineString([[4.88,  61.7], [9.13,   61.7]])], name: "default", color: colourRed, shown: true}));
+drawTools.layers().add(ui.Map.GeometryLayer({geometries: [ee.Geometry.LineString([[4.88,  61.7], [9.13,   61.7]])], name: "default", color: "red", shown: true}));
 var drawLineState = 0;
 var drawMessage = ui.Label({
   style: {
@@ -1519,44 +1525,53 @@ function run() {
       mapMain.addLayer(snowline.qualityMosaic.select('cloudMask').not().selfMask(), {palette: ['yellow']}, 'Cloud Mask (Yellow)', 1, 0.7);
       mapMain.addLayer(snowline.snowEdgeRaster.select('snow_edge'), {palette: 'red'}, 'Snow-edge Raster (Red)', 1, 1);
       
+      var newInstance = 1;
       mapMain.onTileLoaded(ui.util.debounce(function(map) {
-        loadMessage.style().set('shown', false);
-        downloadLabelSnowlines.style().set("shown", true);
-        downloadLabelClimate.style().set("shown", true);
-        /** Charts **/
-        panelChart1.clear();
-        panelChart2.clear();
-        panelChart3.clear();
-        panelChart4.clear();
-        var temperatureChart = chartSampleSeries(climate.climateStratified, 'distance', ['autumn_temperature_mean', 'spring_temperature_mean', 'summer_temperature_mean', 'winter_temperature_mean'], 'ScatterChart', 'Seasonal Mean ASL Temperature by Distance (Sample)', 'Distance (km)', 'Temperature (°C)', ['orange', 'green', 'yellow', 'blue'], 0.2);
-        var snowfallChart = chartSampleSeries(climate.climateStratified, 'distance', ['autumn_snowfall_mean', 'spring_snowfall_mean', 'summer_snowfall_mean', 'winter_snowfall_mean'], 'ScatterChart', 'Seasonal Mean Snowfall by Distance', 'Distance (km) (Sample)', 'Snowfall (m S.W.E)', ['orange', 'green', 'yellow', 'blue'], 0.2);
-        var solarChart = chartSampleSeries(climate.climateStratified, 'distance', ['autumn_surface_solar_radiation_downwards_mean', 'spring_surface_solar_radiation_downwards_mean', 'summer_surface_solar_radiation_downwards_mean', 'winter_surface_solar_radiation_downwards_mean'], 'ScatterChart', 'Seasonal Mean Downwelling Solar Radiation by Distance (Sample)', 'Distance (km)', 'Solar Radiation Downwards (kJ)', ['orange', 'green', 'yellow', 'blue'], 0.2);
-        var snowlineChart = chartSample(snowline.snowEdgeVectorStratified.select(["altitude", "distance"]), 'distance', 'altitude', 'Snow-edge Altitude by Distance (Sample)', 'Distance (km)', 'Altitude (m asl)', ['red'], 0.2);
-        panelChart2.add(temperatureChart);
-        panelChart3.add(snowfallChart);
-        panelChart4.add(solarChart);
-        panelChart1.add(snowlineChart);
-        /** Download Links **/
-        snowline.snowEdgeVectorStratified.getDownloadURL({
-          format: "csv",
-          filename: "snowlinesSnowline" + settings.startDate + "T" + settings.advanceDays + settings.satelliteName.slice(0, 7) + settings.satelliteName.slice(8, 9),
-          callback: function(url) {
-            // ...and once url is retrieved update the label value and set it as a url link.
-            downloadLabelSnowlines.setValue("Download Sample of Snowlines Data" + " (" + settings.startDate + "T" + settings.advanceDays + settings.satelliteName.slice(0, 7) + settings.satelliteName.slice(8, 9) + ")");
-            downloadLabelSnowlines.setUrl(url);
-            downloadLabelSnowlines.style().set("color", colourCyan);
-          }
-        });
-        climate.climateStratified.getDownloadURL({
-          format: "csv",
-          filename: "snowlinesClimate" + settings.startDate.slice(0, 4),
-          callback: function(url) {
-            // ...and once url is retrieved update the label value and set it as a url link.
-            downloadLabelClimate.setValue( "Download Sample of Climate Data" + " (" + settings.startDate.slice(0, 4) + ")");
-            downloadLabelClimate.setUrl(url);
-            downloadLabelClimate.style().set("color", colourCyan);
-          }
-        });
+        if (newInstance === 1) {
+          // One time Only!
+          newInstance = 0;
+          
+          // Set label styles
+          loadMessage.style().set('shown', false);
+          downloadLabelSnowlines.style().set("shown", true);
+          downloadLabelClimate.style().set("shown", true);
+          
+          /** Charts **/
+          panelChart1.clear();
+          panelChart2.clear();
+          panelChart3.clear();
+          panelChart4.clear();
+          var temperatureChart = chartSampleSeries(climate.climateStratified, 'distance', ['autumn_temperature_mean', 'spring_temperature_mean', 'summer_temperature_mean', 'winter_temperature_mean'], 'ScatterChart', 'Seasonal Mean ASL Temperature by Distance (Sample)', 'Distance (km)', 'Temperature (°C)', [autumn, spring, summer, winter], 0.6);
+          var snowfallChart = chartSampleSeries(climate.climateStratified, 'distance', ['autumn_snowfall_mean', 'spring_snowfall_mean', 'summer_snowfall_mean', 'winter_snowfall_mean'], 'ScatterChart', 'Seasonal Mean Snowfall by Distance', 'Distance (km)', 'Snowfall (m SWE)', [autumn, spring, summer, winter], 0.6);
+          var solarChart = chartSampleSeries(climate.climateStratified, 'distance', ['autumn_surface_solar_radiation_downwards_mean', 'spring_surface_solar_radiation_downwards_mean', 'summer_surface_solar_radiation_downwards_mean', 'winter_surface_solar_radiation_downwards_mean'], 'ScatterChart', 'Seasonal Mean Downwelling Solar Radiation by Distance (Sample)', 'Distance (km)', 'Solar Radiation Downwards (kJ)', [autumn, spring, summer, winter], 0.6);
+          var snowlineChart = chartSample(snowline.snowEdgeVectorStratified.select(["altitude", "distance"]), 'distance', 'altitude', 'Snow-edge Altitude by Distance (Sample)', 'Distance (km)', 'Altitude (m ASL)', ['red'], 0.2);
+          panelChart2.add(temperatureChart);
+          panelChart3.add(snowfallChart);
+          panelChart4.add(solarChart);
+          panelChart1.add(snowlineChart);
+          
+          /** Download Links **/
+          snowline.snowEdgeVectorStratified.getDownloadURL({
+            format: "csv",
+            filename: "snowlinesSnowline" + settings.startDate + "T" + settings.advanceDays + settings.satelliteName.slice(0, 7) + settings.satelliteName.slice(8, 9),
+            callback: function(url) {
+              // ...and once url is retrieved update the label value and set it as a url link.
+              downloadLabelSnowlines.setValue("Download Sample of Snowlines Data" + " (" + settings.startDate + "T" + settings.advanceDays + settings.satelliteName.slice(0, 7) + settings.satelliteName.slice(8, 9) + ")");
+              downloadLabelSnowlines.setUrl(url);
+              downloadLabelSnowlines.style().set("color", colourCyan);
+            }
+          });
+          climate.climateStratified.getDownloadURL({
+            format: "csv",
+            filename: "snowlinesClimate" + settings.startDate.slice(0, 4),
+            callback: function(url) {
+              // ...and once url is retrieved update the label value and set it as a url link.
+              downloadLabelClimate.setValue( "Download Sample of Climate Data" + " (" + settings.startDate.slice(0, 4) + ")");
+              downloadLabelClimate.setUrl(url);
+              downloadLabelClimate.style().set("color", colourCyan);
+            }
+          });
+        }
       }, 5000));
     
     }
@@ -1673,21 +1688,24 @@ var labelTitle = ui.Label({
   }
 });
 var labelSettingsInfo = ui.Label({
-  value: "Resolve snowline altitudes at 30m resolution using imagery from Landsats 4-9 and the JAXA ALOS terrain model. Compare this to snowfall, temperature, and insolation data from the ERA5-land Climate Reanalysis. Using the settings below, draw a transect, choose a date (designed for summer!), and select a corrosponding satellite. Then let the app show you how snowline altitude and climate changes across this transect. Some example settings used in the corrosponding study from which this app was created are being computed right now!",
+  value: "Resolve snowline altitudes at 30m resolution using imagery from Landsats 4-9 and the JAXA ALOS terrain model. Compare this to snowfall, temperature, and insolation data from the ERA5-land Climate Reanalysis.\n\nUsing the settings below, draw a transect, choose a date, and select a corrosponding satellite. Then let the app show you how snowline altitude and climate changes across this transect. Some example settings used in the corrosponding study from which this app was created are being computed right now!",
   style: {
     position: "bottom-center",
     padding: "0px, 0px, 0px, 10px",
     fontSize: "16px",
-    fontWeight: "300"
+    fontWeight: "300",
+    whiteSpace: "pre-line",
+    textAlign: "justify"
   }
 });
 var labelCredits2 = ui.Label({
-  value: "Data: Imagery from the Landsat programme, USGS; Altitude from JAXA ALOS; Climate data from the ERA5-land Climate Reanalysis (This study contains modified Copernicus Climate Change Service Information 2022 for which neither the European Commission nor ECMWF is responsible); Glacier and ice caps from GLIMS; Waterbodies from EU JRC Waterbodies.",
+  value: "Data Sources:\n- Imagery from the Landsat programme, USGS\n- Altitude from ALOS World 3D DSM, JAXA EORC\n- Climate data from the ERA5-land Climate Reanalysis (This study contains modified Copernicus Climate Change Service Information 2022 for which neither the European Commission nor ECMWF is responsible)\n- Glacier and ice caps from GLIMS\n- Waterbodies from EU JRC Waterbodies.",
   style: {
     position: "bottom-center",
     padding: "0px, 0px, 0px, 10px",
     fontSize: "16px",
-    fontWeight: "100"
+    fontWeight: "100",
+    whiteSpace: "pre-line"
   }
 });
 var labelSettings = ui.Label({
@@ -1700,7 +1718,7 @@ var labelSettings = ui.Label({
   }
 });
 var labelAutoApplied = ui.Label({
-  value: "Changes wil be automatically applied and loaded",
+  value: "Changes wil be automatically applied",
   style: {
     position: "bottom-center",
     padding: "0px, 0px, 0px, 10px",
@@ -1719,12 +1737,13 @@ var labelDraw = ui.Label({
   }
 });
 var labelDate = ui.Label({
-  value: "b) Set date and size of image collection window (days):",
+  value: "b) Set date and size of image collection window (days):\n Be careful at high latitudes as the algorithm is desgined for use during high sun elevations.",
   style: {
     position: "bottom-center",
     padding: "0px, 0px, 0px, 10px",
     fontSize: "16px",
-    fontWeight: "300"
+    fontWeight: "300",
+    whiteSpace: "pre-line"
   }
 });
 var labelSatellite = ui.Label({
@@ -1748,12 +1767,14 @@ var labelResults = ui.Label({
 var downloadLabelSnowlines = ui.Label({value: "Loading . . .", style: {padding: "0px, 0px, 0px, 10px", shown: false}});
 var downloadLabelClimate = ui.Label({value: "Loading . . .", style: {padding: "0px, 0px, 0px, 10px", shown: false}});
 var labelResultsInfo = ui.Label({
-  value: "The charts below show the results of the algorithm for your transect. 0km starts where you began drawing the transect. Only a small sample of snowline points are plotted to avoid crashing the app! Links are provided below for you to download the sample data. You can also view the imagery and other data in the map layers (top right) and are able turn these on and off as you wish. This snowline algorithm isn't actually detecting the snowline! Instead, it resolves snow-edges (the red dots) from which the snowline is predicted through an OLS regression (the black line on the snow-edge chart).",
+  value: "The charts below show a sample of the results of the algorithm for your transect, sample data download links are also provided (sampled for speed). 0 km starts where you began drawing the transect.\n\nYou can view source imagery and other rasters in the map layers (top right), including a full non-sampled view of every snowline point inside and outside your transect.\n\nThe snowline algorithm isn't actually detecting the snowline! Instead, it resolves snow-edges (the red dots) from which the snowline is predicted through an OLS regression (the black line on the snow-edge chart).\n\nSeeing misclassifications? Zoom in - these may in fact be artefacts of processing at lower resolution.",
   style: {
     position: "bottom-center",
     padding: "0px, 0px, 0px, 10px",
     fontSize: "16px",
-    fontWeight: "300"
+    fontWeight: "300",
+    whiteSpace: "pre-line",
+    textAlign: "justify"
   }
 });
 var labelCredits = ui.Label({
@@ -1841,7 +1862,7 @@ var panelCharts = ui.Panel({
   }
 });
 var panelUser = ui.Panel({
-  widgets: [labelTitle, labelSettingsInfo, labelCredits2, labelSettings, labelAutoApplied, labelDraw, buttonDraw, sliderTransectWidth, labelDate, dateSlider, advanceDaysSlider, labelSatellite, satelliteSelectWrapper, labelResults, labelResultsInfo, loadMessage, panelLinks],
+  widgets: [labelTitle, labelSettingsInfo, labelSettings, labelAutoApplied, labelDraw, buttonDraw, sliderTransectWidth, labelDate, dateSlider, advanceDaysSlider, labelSatellite, satelliteSelectWrapper, labelResults, labelResultsInfo, loadMessage, panelLinks],
   layout: ui.Panel.Layout.flow(),
   style: {
     padding: "0px, 0px, 0px, 0px",
@@ -1852,7 +1873,7 @@ var panelUser = ui.Panel({
   }
 });
 var panelMain = ui.Panel({
-  widgets: [panelUser, panelCharts, labelCredits],
+  widgets: [panelUser, panelCharts, labelCredits2, labelCredits],
   layout: ui.Panel.Layout.flow(),
   style: {
     padding: "0px, 0px, 0px, 0px",
