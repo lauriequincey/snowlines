@@ -41,7 +41,7 @@ exports.climate = function(transect, ltCoord, lbCoord, date) {
      .filterBounds(transect)
      .filterDate(ee.DateRange(ee.Date.fromYMD(serverDate.get('year').subtract(1), 9, 01), ee.Date.fromYMD(serverDate.get('year'), 11, 30))),
   ])
-  // Reduce seasons...
+// Reduce seasons...
   .map(function(season) {
     // ...to means
     var seasonMean = ee.ImageCollection(season).reduce(ee.Reducer.mean());
@@ -78,29 +78,34 @@ exports.climate = function(transect, ltCoord, lbCoord, date) {
      regex: "springm_",
      replacement: "",
      all: true
-   });
-   
-  /** Metrics (Land Elevation and Transect Distance) **/
-  // Import Land Surface Elevation 
-  climate = climate.addBands(ee.ImageCollection("JAXA/ALOS/AW3D30/V3_2")
-    .filterBounds(transect)
-    .select(['DSM'], ['altitude'])
-    .mosaic() // mosaic as the JAXA data are an image collection not single raster.
-    
-    // Reduce Elevation to scale of climate data by their mean
-    .setDefaultProjection({crs: "EPSG:4326", scale: 11132})
-    .reduceResolution({
-      reducer: ee.Reducer.mean(),
-      bestEffort: true
-    }) 
+   }
   );
-   
-  /** Sample Pixels **/
+ 
+/** Metrics (Land Elevation and Transect Distance) **/
+// Import Land Surface Elevation 
+  climate = climate.addBands([
+    ee.ImageCollection("JAXA/ALOS/AW3D30/V3_2")
+      .filterBounds(transect)
+      .select(['DSM'], ['altitude'])
+      .mosaic() // mosaic as the JAXA data are an image collection not single raster.
+      
+      
+      // Reduce Elevation to scale of climate data by their mean
+      .setDefaultProjection({crs: "EPSG:4326", scale: 11132})
+      
+      // 04/09/2023 As of date this was stopping the climate data from being generated in the APP but was still working in cloud export. Don't really see why I ever wrote it in the first place as it does nothing to the data which is already projected to a specified scale. Removed now and tested - it makes no difference!.
+      //.reduceResolution({
+      //  reducer: ee.Reducer.mean(),
+      //  bestEffort: true
+      //})
+    ]);
+ 
+/** Sample Pixels **/
   climate = climate
   .sample({
     region: transect,
     scale: 11132,
-    //projection:,
+    //projection: ,
     //factor,
     //numPixels,
     //seed,
@@ -129,7 +134,7 @@ exports.climate = function(transect, ltCoord, lbCoord, date) {
         "summer_temperature_mean": ee.Number(ee.Feature(feature).get('summer_temperature_mean')).add(ee.Number(ee.Feature(feature).get('altitude')).divide(100).multiply(0.65))
         });
     });
-  
+
   return climate;
-  
+
 };

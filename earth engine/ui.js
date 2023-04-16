@@ -1322,11 +1322,13 @@ function climateAlgorithm(transect, ltCoord, lbCoord, date) {
       .mosaic() // mosaic as the JAXA data are an image collection not single raster.
       
       // Reduce Elevation to scale of climate data by their mean
-      .setDefaultProjection({crs: "EPSG:4326", scale: 11132})
-      .reduceResolution({
-        reducer: ee.Reducer.mean(),
-        bestEffort: true
-      }),
+      .setDefaultProjection({crs: "EPSG:4326", scale: 11132}),
+      
+      // 04/09/2023 As of date this was stopping the climate data from being generated in the APP but was still working in cloud export. Don't really see why I ever wrote it in the first place as it does nothing to the data which is already projected to a specified scale. Removed now and tested - it makes no difference!.
+      //.reduceResolution({ 
+      //  reducer: ee.Reducer.mean(),
+      //  bestEffort: true
+      //}),
     ee.Image.constant(1).int().rename("class") // for stratified sample
   ]);
    
