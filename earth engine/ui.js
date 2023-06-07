@@ -783,11 +783,11 @@ function drawLine() {
     drawMessage.style().set("color", "#c92c00");
     drawMessage.style().set("backgroundColor", "#ffd2ba");
   });
-  // Remove messages after half a second
+  // Remove messages after a second
   ui.util.setTimeout(function() {
     //mapMain.remove(drawMessage)
     drawMessage.style().set("shown", false);
-  }, 500);
+  }, 1000);
   }
 function transectGenerator() {
     
@@ -875,9 +875,11 @@ function satelliteFilter() {
       style: {
         color: "#a3a3a3",
         backgroundColor: "rgba(255, 255, 255, 0)",
-        width: "435px",
-        position: "top-center",
-        padding: "0px 0px 0px 0px"
+        width: "130px",
+        height: "30px",
+        padding: "0px 0px 0px 0px",
+        margin: "0px 0px 0px 0px",
+        //border: "2px solid blue"
       }
     });
     satelliteSelectWrapper.add(satelliteSelect);
@@ -1428,7 +1430,7 @@ function chartSample(featureCollection, xProperty, yProperties, title, hAxisTitl
       hAxis: {
         title: hAxisTitle,
         titleTextStyle: {italic: false, bold: true},
-       gridlines: {count: 0},
+        gridlines: {count: 0},
         viewWindow: {min: 0, max: featureCollection.aggregate_max(xProperty)}
       },
       vAxis: {
@@ -1440,7 +1442,13 @@ function chartSample(featureCollection, xProperty, yProperties, title, hAxisTitl
       width: "460px",
       height: "291.875px", // golden ratio (10:16)
       colors: colors,
-      chartArea: {backgroundColor: "white"},
+      chartArea: {
+        backgroundColor: "white",
+        top: 30,
+        left: 80, 
+        width: "100%",
+        height: "70%"
+      },
       dataOpacity: dataOpacity,
       trendlines: { 
         0: {
@@ -1451,7 +1459,9 @@ function chartSample(featureCollection, xProperty, yProperties, title, hAxisTitl
           //labelInLegend: "Linear Regression",
           showR2: true
         }
-      }
+      },
+      padding: "0px 0px 0px 0px",
+      margin: "0px 0px 0px 0px",
     })
     .setDownloadable(true);
 }
@@ -1478,7 +1488,16 @@ function chartSampleSeries(featureCollection, xProperty, yProperties, chartType,
       gridlines: {count: 0},
     },
     colors: colorsList,
+    chartArea: {
+      backgroundColor: "white",
+      top: 30,
+      left: 80, 
+      width: "100%",
+      height: "70%"
+    },
     dataOpacity: dataOpacity,
+    padding: "0px 0px 0px 0px",
+    margin: "0px 0px 0px 0px",
   })
   .setDownloadable(true);
 }
@@ -1488,6 +1507,7 @@ function run() {
   
   /** Reset **/
   loadMessage.style().set('shown', true);
+  loadMessage2.style().set('shown', true);
   downloadLabelClimate.setUrl("");
   downloadLabelSnowlines.setUrl("");
   downloadLabelSnowlines.style().set("color", "black");
@@ -1507,6 +1527,7 @@ function run() {
   imagery.size().evaluate(function(input) {
     if (input === 0) {
       loadMessage.style().set('shown', false);
+      loadMessage2.style().set('shown', false);
       errMessage.style().set('shown', true);
       ui.util.setTimeout(function() {errMessage.style().set('shown', false)}, 5000);
     } else {
@@ -1535,6 +1556,7 @@ function run() {
           
           // Set label styles
           loadMessage.style().set('shown', false);
+          loadMessage2.style().set('shown', false);
           downloadLabelSnowlines.style().set("shown", true);
           downloadLabelClimate.style().set("shown", true);
           
@@ -1543,10 +1565,10 @@ function run() {
           panelChart2.clear();
           panelChart3.clear();
           panelChart4.clear();
-          var temperatureChart = chartSampleSeries(climate.climateStratified, 'distance', ['autumn_temperature_mean', 'spring_temperature_mean', 'summer_temperature_mean', 'winter_temperature_mean'], 'ScatterChart', 'Seasonal Mean ASL Temperature by Distance (Sample)', 'Distance (km)', 'Temperature (°C)', [autumn, spring, summer, winter], 0.6);
+          var temperatureChart = chartSampleSeries(climate.climateStratified, 'distance', ['autumn_temperature_mean', 'spring_temperature_mean', 'summer_temperature_mean', 'winter_temperature_mean'], 'ScatterChart', 'Seasonal Mean ASL Temperature by Distance', 'Distance (km)', 'Temperature (°C)', [autumn, spring, summer, winter], 0.6);
           var snowfallChart = chartSampleSeries(climate.climateStratified, 'distance', ['autumn_snowfall_mean', 'spring_snowfall_mean', 'summer_snowfall_mean', 'winter_snowfall_mean'], 'ScatterChart', 'Seasonal Mean Snowfall by Distance', 'Distance (km)', 'Snowfall (m SWE)', [autumn, spring, summer, winter], 0.6);
-          var solarChart = chartSampleSeries(climate.climateStratified, 'distance', ['autumn_surface_solar_radiation_downwards_mean', 'spring_surface_solar_radiation_downwards_mean', 'summer_surface_solar_radiation_downwards_mean', 'winter_surface_solar_radiation_downwards_mean'], 'ScatterChart', 'Seasonal Mean Downwelling Solar Radiation by Distance (Sample)', 'Distance (km)', 'Solar Radiation Downwards (kJ)', [autumn, spring, summer, winter], 0.6);
-          var snowlineChart = chartSample(snowline.snowEdgeVectorStratified.select(["altitude", "distance"]), 'distance', 'altitude', 'Snow-edge Altitude by Distance (Sample)', 'Distance (km)', 'Altitude (m ASL)', ['red'], 0.2);
+          var solarChart = chartSampleSeries(climate.climateStratified, 'distance', ['autumn_surface_solar_radiation_downwards_mean', 'spring_surface_solar_radiation_downwards_mean', 'summer_surface_solar_radiation_downwards_mean', 'winter_surface_solar_radiation_downwards_mean'], 'ScatterChart', 'Seasonal Mean Downwelling Solar Radiation by Distance', 'Distance (km)', 'Solar Radiation Downwards (kJ)', [autumn, spring, summer, winter], 0.6);
+          var snowlineChart = chartSample(snowline.snowEdgeVectorStratified.select(["altitude", "distance"]), 'distance', 'altitude', 'Snow-edge Altitude by Distance', 'Distance (km)', 'Altitude (m ASL)', ['red'], 0.2);
           panelChart2.add(temperatureChart);
           panelChart3.add(snowfallChart);
           panelChart4.add(solarChart);
@@ -1580,7 +1602,114 @@ function run() {
   });
 }
 
-/** User Widgets **/
+/** UI **/
+// MiniMap
+var panelMiniMap = ui.Panel({
+ widgets: [mapMini],
+ layout: ui.Panel.Layout.absolute(),
+ style: {
+   height: "250px",
+   width: "250px",
+   padding: "0px 0px 0px 0px",
+   position: "bottom-right",
+   border: "8px solid white",
+   },
+});
+
+// Intro
+var labelIntroTitle = ui.Label({
+  value: "Snowlines",
+  style: {
+    fontSize: "72px",
+    fontWeight: "50",
+    position: "top-center",
+    height: "stretch",
+    padding: "0px 0px 0px 0px",
+    margin: "0px 0px 0px 0px",
+    //border: "2px dashed red"
+  }
+});
+var labelIntroText = ui.Label({
+  value: "Resolve snowline altitudes at 30m resolution using imagery from Landsats 4-9 and the JAXA ALOS terrain model. Compare this to snowfall, temperature, and insolation data from the ERA5-land Climate Reanalysis.\n\nThe app shows you how snowline altitude and climate change across a transect. Some example settings from the corrosponding study are being computed right now!",
+  style: {
+    fontSize: "16px",
+    fontWeight: "300",
+    whiteSpace: "pre-line",
+    textAlign: "justify",
+    height: "160px",
+    padding: "0px 0px 0px 0px",
+    margin: "100px 0px 0px 0px",
+    //border: "2px dashed red"
+  }
+});
+var panelIntro = ui.Panel({
+  widgets: [labelIntroTitle, labelIntroText],
+  layout: ui.Panel.Layout.absolute(),
+  style: {
+    height: "265px",
+    width: "stretch",
+    //stretch: "vertical",
+    padding: "0px 0px 0px 0px",
+    margin: "0px 0px 0px 0px",
+    //border: "2px dashed red"
+  }
+});
+
+// Settings
+// - Intro
+var labelSettingsTitle = ui.Label({
+  value: "Settings",
+  style: {
+    fontSize: "28px",
+    fontWeight: "400",
+    position: "top-left",
+    height: "32px",
+    padding: "0px 0px 0px 0px",
+    margin: "0px 0px 0px -10px",
+    //border: "2px dashed red"
+  }
+});
+var labelSettingsIntro = ui.Label({
+  value: "Using the settings below, draw a transect, choose a date window to collect imagery from, and select an available Landsat satellite. Changes are automatically applied and loaded.",
+  style: {
+    fontSize: "16px",
+    fontWeight: "300",
+    whiteSpace: "pre-line",
+    textAlign: "justify",
+    height: "65px",
+    padding: "0px 0px 0px 0px",
+    margin: "50px 0px 0px 0px",
+    //border: "2px dashed red"
+  }
+});
+
+// - Transect
+var labelSettingsTransectSubtitle = ui.Label({
+  value: "Transect",
+  style: {
+    fontSize: "16px",
+    fontWeight: "500",
+    whiteSpace: "pre-line",
+    textAlign: "justify",
+    height: "20px",
+    padding: "0px 0px 0px 0px",
+    margin: "120px 0px 0px 0px",
+    //border: "2px dashed red"
+  }
+});
+var labelSettingsTransectDrawinstructions = ui.Label({
+  value: "Move around the map by clicking and dragging. To draw the transect, enter drawing mode by clicking the button below. Then click on the map to set the start of the transect and click again, elswhere, to set the end of the transect. C  lick the button again to exit and apply your changes. To start over, click the button again.",
+  style: {
+    fontSize: "16px",
+    fontWeight: "300",
+    whiteSpace: "pre-line",
+    textAlign: "justify",
+    height: "140px",
+    padding: "0px 0px 0px 0px",
+    margin: "140px 0px 0px 0px",
+    //border: "2px dashed red"
+  }
+});
 var buttonDraw = ui.Button({
   label: "✏️ Start/Stop Drawing",
   onClick: function() {
@@ -1591,10 +1720,27 @@ var buttonDraw = ui.Button({
     }
   },
   style: {
-    width: "430px",
-    position: "bottom-center",
-    padding: "0px 0px 0px 10px",
+    width: "130px",
+    height: "30px",
     backgroundColor: "rgba(255, 255, 255, 0)",
+    position: "top-center",
+    padding: "0px 0px 0px 0px",
+    margin: "285px 0px 0px 0px",
+    //border: "2px dashed red"
+    
+  }
+});
+var labelSettingsTransectSliderinstructions = ui.Label({
+  value: "Use the slider below to set the width of the transect you just drew.",
+  style: {
+    fontSize: "16px",
+    fontWeight: "300",
+    whiteSpace: "pre-line",
+    textAlign: "justify",
+    height: "40px",
+    padding: "0px 0px 0px 0px",
+    margin: "335px 0px 0px 0px",
+    //border: "2px dashed red"
   }
 });
 var sliderTransectWidth = ui.Slider({
@@ -1610,11 +1756,57 @@ var sliderTransectWidth = ui.Slider({
   }, 5000),
   direction: "horizontal",
   style: {
-    width: "430px",
+    width: "400px",
+    height: "20px",
     color: colourCyan,
-    position: "bottom-center",
-    padding: "0px 0px 5px 10px",
     backgroundColor: "rgba(255, 255, 255, 0)",
+    position: "top-left",
+    padding: "0px 0px 0px 0px",
+    margin: "365px 0px 0px 0px",
+    //border: "2px dashed red"
+  }
+});
+var labelSettingsTransectSliderUnits = ui.Label({
+  value: "km Wide",
+  style: {
+    fontSize: "14.5px",
+    fontWeight: "400",
+    color: "#88cce3",
+    whiteSpace: "pre-line",
+    textAlign: "justify",
+    width: "70px",
+    height: "20px",
+    padding: "0px 0px 0px 0px",
+    margin: "373.5px 0px 0px 388px",
+    //border: "2px dashed red"
+  }
+});
+
+// - Date
+var labelSettingsDateSubtitle = ui.Label({
+  value: "Imagery Collection Date",
+  style: {
+    fontSize: "16px",
+    fontWeight: "500",
+    whiteSpace: "pre-line",
+    textAlign: "justify",
+    height: "20px",
+    padding: "0px 0px 0px 0px",
+    margin: "410px 0px 0px 0px",
+    //border: "2px dashed red"
+  }
+});
+var labelSettingsDateInstructions1 = ui.Label({
+  value: "The algorithm requires a date-window to collect imagery from. Specify this by selecting a start date...",
+  style: {
+    fontSize: "16px",
+    fontWeight: "300",
+    whiteSpace: "pre-line",
+    textAlign: "justify",
+    height: "40px",
+    padding: "0px 0px 0px 0px",
+    margin: "433px 0px 0px 0px",
+    //border: "2px dashed red"
   }
 });
 var dateSlider = ui.DateSlider({
@@ -1629,10 +1821,25 @@ var dateSlider = ui.DateSlider({
     });
   }, 5000),
   style: {
-    width: "430px",
-    position: "bottom-center",
-    padding: "0px 0px 0px 10px",
-    backgroundColor: "rgba(255, 255, 255, 0)"
+    width: "459px",
+    height: "101px",
+    backgroundColor: "rgba(255, 255, 255, 0)",
+    padding: "0px 0px 0px 0px",
+    margin: "490px 0px 0px 0px",
+    //border: "2px dashed red",
+  }
+});
+var labelSettingsDateInstructions2 = ui.Label({
+  value: "...and use the slider below to set the subsequent number of days you want to collect imagery for.",
+  style: {
+    fontSize: "16px",
+    fontWeight: "300",
+    whiteSpace: "pre-line",
+    textAlign: "justify",
+    height: "40px",
+    padding: "0px 0px 0px 0px",
+    margin: "600px 0px 0px 0px",
+    //border: "2px dashed red"
   }
 });
 var advanceDaysSlider = ui.Slider({
@@ -1647,169 +1854,188 @@ var advanceDaysSlider = ui.Slider({
   direction: "horizontal",
   style: {
     color: colourCyan,
-    position: "bottom-center",
-    width: "430px",
-    padding: "0px 0px 30px 10px",
-    backgroundColor: "rgba(255, 255, 255, 0)"
+    backgroundColor: "rgba(255, 255, 255, 0)",
+    width: "400px",
+    height: "20px",
+    position: "top-left",
+    padding: "0px 0px 0px 0px",
+    margin: "640px 0px 0px 0px",
+    //border: "2px dashed red"
+  }
+});
+var labelSettingsDateSliderUnits = ui.Label({
+  value: "Days",
+  style: {
+    fontSize: "14.5px",
+    fontWeight: "400",
+    color: "#88cce3",
+    whiteSpace: "pre-line",
+    textAlign: "justify",
+    width: "70px",
+    height: "20px",
+    padding: "0px 0px 0px 0px",
+    margin: "648px 0px 0px 388px",
+    //border: "2px dashed red"
+  }
+});
+
+// - Satellite
+var labelSettingsSatelliteSubtitle = ui.Label({
+  value: "Satellite",
+  style: {
+    fontSize: "16px",
+    fontWeight: "500",
+    whiteSpace: "pre-line",
+    textAlign: "justify",
+    height: "20px",
+    padding: "0px 0px 0px 0px",
+    margin: "680px 0px 0px 0px",
+    //border: "2px dashed red"
+  }
+});
+var labelSettingsSatelliteInstructions = ui.Label({
+  value: "The drop-down menu below shows the available satellites for the date-window you specified. Select the satellite you wish to collect imagery from. Defaults to the latest possible satellite.",
+  style: {
+    fontSize: "16px",
+    fontWeight: "300",
+    whiteSpace: "pre-line",
+    textAlign: "justify",
+    height: "60px",
+    padding: "0px 0px 0px 0px",
+    margin: "703px 0px 0px 0px",
+    //border: "2px dashed red"
   }
 });
 var satelliteSelect = null; // See input components > satellite filter
 var satelliteSelectWrapper = ui.Panel({
   layout: ui.Panel.Layout.absolute(),
   style: {
-    height: "80px",
-    width: "451px",
-    position: "bottom-center",
-    padding: "0px 0px 50px 0px",
-    backgroundColor: "rgba(255, 255, 255, 0)"
+    height: "33.5px",
+    width: "133.5px",
+    backgroundColor: "rgba(255, 255, 255, 0)",
+    position: "top-center",
+    padding: "0px 0px 0px 0px",
+    margin: "765px 0px 0px 0px",
+    //border: "2px dashed red",
   }
 }); // See input components > satellite filter
 
-/** Text Widgets **/
-var loadMessage = ui.Label({
-  value: "  Waiting for map layers . . .\n   (If page hangs when charting, please wait)",
-  style: {
-    color: "#c92c00",
-    backgroundColor: "#ffd2ba",
-    fontSize: "14px",
-    fontWeight: "300",
-    shown: true,
-    padding: "0px, 0px, 0px, 0px",
-    width: "98%",
-    height: "29px",
-    position: "top-center"
-  }
-});
-var labelTitle = ui.Label({
-  value: "Snowlines",
-  style: {
-    position: "bottom-center",
-    padding: "0px, 0px, 0px, 10px",
-    fontSize: "72px",
-    fontWeight: "50"
-  }
-});
-var labelSettingsInfo = ui.Label({
-  value: "Resolve snowline altitudes at 30m resolution using imagery from Landsats 4-9 and the JAXA ALOS terrain model. Compare this to snowfall, temperature, and insolation data from the ERA5-land Climate Reanalysis.\n\nUsing the settings below, draw a transect, choose a date, and select a corrosponding satellite. Then let the app show you how snowline altitude and climate changes across this transect. Some example settings used in the corrosponding study from which this app was created are being computed right now!",
-  style: {
-    position: "bottom-center",
-    padding: "0px, 0px, 0px, 10px",
-    fontSize: "16px",
-    fontWeight: "300",
-    whiteSpace: "pre-line",
-    textAlign: "justify"
-  }
-});
-var labelCredits2 = ui.Label({
-  value: "Data Sources:\n- Imagery from the Landsat programme, USGS\n- Altitude from ALOS World 3D DSM, JAXA EORC\n- Climate data from the ERA5-land Climate Reanalysis (This study contains modified Copernicus Climate Change Service Information 2022 for which neither the European Commission nor ECMWF is responsible)\n- Glacier and ice caps from GLIMS\n- Waterbodies from EU JRC Waterbodies.",
-  style: {
-    position: "bottom-center",
-    padding: "0px, 0px, 0px, 10px",
-    fontSize: "16px",
-    fontWeight: "100",
-    whiteSpace: "pre-line"
-  }
-});
-var labelSettings = ui.Label({
-  value: "Settings",
-  style: {
-    position: "bottom-center",
-    padding: "0px, 0px, 0px, 10px",
-    fontSize: "28px",
-    fontWeight: "400"
-  }
-});
-var labelAutoApplied = ui.Label({
-  value: "Changes wil be automatically applied",
-  style: {
-    position: "bottom-center",
-    padding: "0px, 0px, 0px, 10px",
-    fontSize: "16px",
-    fontWeight: "600",
-    color: "#cfcfcf"
-  }
-});
-var labelDraw = ui.Label({
-  value: "a) Move around the map, draw a transect, and set it's width (km):",
-  style: {
-    position: "bottom-center",
-    padding: "0px, 0px, 0px, 10px",
-    fontSize: "16px",
-    fontWeight: "300"
-  }
-});
-var labelDate = ui.Label({
-  value: "b) Set date and size of image collection window (days):\n Be careful at high latitudes as the algorithm is desgined for use during high sun elevations.",
-  style: {
-    position: "bottom-center",
-    padding: "0px, 0px, 0px, 10px",
-    fontSize: "16px",
-    fontWeight: "300",
-    whiteSpace: "pre-line"
-  }
-});
-var labelSatellite = ui.Label({
-  value: "c) Pick from available satellites (auto latest):",
-  style: {
-    position: "bottom-center",
-    padding: "0px, 0px, 0px, 10px",
-    fontSize: "16px",
-    fontWeight: "300"
-  }
-});
-var labelResults = ui.Label({
-  value: "Results",
-  style: {
-    position: "bottom-center",
-    padding: "0px, 0px, 0px, 10px",
-    fontSize: "28px",
-    fontWeight: "400"
-  }
-});
-var downloadLabelSnowlines = ui.Label({value: "Loading . . .", style: {padding: "0px, 0px, 0px, 10px", shown: false}});
-var downloadLabelClimate = ui.Label({value: "Loading . . .", style: {padding: "0px, 0px, 0px, 10px", shown: false}});
-var labelResultsInfo = ui.Label({
-  value: "The charts below show a sample of the results of the algorithm for your transect, sample data download links are also provided (sampled for speed). 0 km starts where you began drawing the transect.\n\nYou can view source imagery and other rasters in the map layers (top right), including a full non-sampled view of every snowline point inside and outside your transect.\n\nThe snowline algorithm isn't actually detecting the snowline! Instead, it resolves snow-edges (the red dots) from which the snowline is predicted through an OLS regression (the black line on the snow-edge chart).\n\nSeeing misclassifications? Zoom in - these may in fact be artefacts of processing at lower resolution.",
-  style: {
-    position: "bottom-center",
-    padding: "0px, 0px, 0px, 10px",
-    fontSize: "16px",
-    fontWeight: "300",
-    whiteSpace: "pre-line",
-    textAlign: "justify"
-  }
-});
-var labelCredits = ui.Label({
-  value: "Earth Engine app created by Laurie Quincey",
-  style: {
-    position: "bottom-center",
-    padding: "0px, 0px, 0px, 10px",
-    fontSize: "16px",
-    fontWeight: "100"
-  }
-});
-labelCredits.setUrl("https://github.com/lauriequincey/snowlines");
-
-/** Panels **/
-var panelMiniMap = ui.Panel({
-  widgets: [mapMini],
+// - Combine into Settings Panel
+var panelSettings = ui.Panel({
+  widgets: [
+    labelSettingsTitle, labelSettingsIntro,
+    labelSettingsTransectSubtitle, labelSettingsTransectDrawinstructions, buttonDraw, labelSettingsTransectSliderinstructions, sliderTransectWidth, labelSettingsTransectSliderUnits,
+    labelSettingsDateSubtitle, labelSettingsDateInstructions1, dateSlider, labelSettingsDateInstructions2, advanceDaysSlider, labelSettingsDateSliderUnits,
+    labelSettingsSatelliteSubtitle, labelSettingsSatelliteInstructions, satelliteSelectWrapper
+    ],
   layout: ui.Panel.Layout.absolute(),
   style: {
-    height: "250px",
-    width: "250px",
+    height: "820px",
+    width: "stretch",
+    //stretch: "vertical",
     padding: "0px 0px 0px 0px",
-    position: "bottom-right",
-    border: "8px solid white",
-    },
+    margin: "0px 0px 0px 0px",
+    //border: "2px dashed red"
+  }
 });
-var panelLinks = ui.Panel({
-  widgets: [downloadLabelSnowlines, downloadLabelClimate],
-  layout: ui.Panel.Layout.flow(),
+
+// Results
+var labelResultsTitle = ui.Label({
+  value: "Results",
   style: {
-    padding: "0px, 0px, 0px, 0px",
-    stretch: "vertical",
-    width: "490px",
-    position: "top-center"
+    fontSize: "28px",
+    fontWeight: "400",
+    position: "top-left",
+    height: "32px",
+    padding: "0px 0px 0px 0px",
+    margin: "0px 0px 0px -10px",
+    //border: "2px dashed red"
+  }
+});
+var labelResultsInfo = ui.Label({
+  value: "The charts loading below show sampled results from the drawn transect. 0 km starts where you began drawing the transect. You can view the source imagery and other rasters in the map layers at the top right of the web page.",
+  style: {
+    fontSize: "16px",
+    fontWeight: "300",
+    whiteSpace: "pre-line",
+    textAlign: "justify",
+    height: "80px",
+    padding: "0px 0px 0px 0px",
+    margin: "50px 0px 0px 0px",
+    //border: "2px dashed red"
+  }
+});
+var labelResultsWhatshappeningSubtitle = ui.Label({
+  value: "What's Happening?",
+  style: {
+    fontSize: "16px",
+    fontWeight: "500",
+    whiteSpace: "pre-line",
+    textAlign: "justify",
+    height: "20px",
+    padding: "0px 0px 0px 0px",
+    margin: "140px 0px 0px 0px",
+    //border: "2px dashed red"
+  }
+});
+var labelResultsWhatshappeningInfo = ui.Label({
+  value: "As you are reading this, the web app will have found any imagery present and has begun to process it live. In short, the algorithm is finding archetypal land surface pixels in order to apply a linear spectral unmixing function on the imagery. This allows us to estimate the percentange cover of snow in every pixel and then take all those above 50%. A simple edge-detection kernel is run over the imagery to find the edges of these predominantly snow pixels. Cloud, water, etc. are masked out and the remaining snow-edges are cross-referenced to the JAXA ALOS terrain model, providing an altitude for each snow-edge. This is the end result of the algorithm as is shown in the 'snow-edge' layer (red dots on the map). This generates a non-sampled, resolution-preserving point-cloud from which the snowline is predicted through an OLS regression (the black line on the snow-edge chart below). Thus, the spatial nature of snowlines can be interrogated at sub-regional scales!\n\nSeeing misclassifications? Zoom in - these are often artefacts of processing at lower resolution.\n\nThe data displayed are available to download via the links below. Note: the results are sampled to limit the size of the dataset so to not crash your web browser.",
+  style: {
+    fontSize: "16px",
+    fontWeight: "300",
+    whiteSpace: "pre-line",
+    textAlign: "justify",
+    height: "450px",
+    padding: "0px 0px 0px 0px",
+    margin: "160px 0px 0px 0px",
+    //border: "2px dashed red"
+  }
+});
+var labelChartsSubtitle = ui.Label({
+  value: "Charts",
+  style: {
+    fontSize: "16px",
+    fontWeight: "500",
+    whiteSpace: "pre-line",
+    textAlign: "justify",
+    height: "20px",
+    padding: "0px 0px 0px 0px",
+    margin: "620px 0px 0px 0px",
+    //border: "2px dashed red"
+  }
+});
+
+// - Combine Results Sections into Panel
+var panelResults = ui.Panel({
+  widgets: [
+    labelResultsTitle, labelResultsInfo,
+    labelResultsWhatshappeningSubtitle, labelResultsWhatshappeningInfo,
+    labelChartsSubtitle
+    ],
+  layout: ui.Panel.Layout.absolute(),
+  style: {
+    height: "645px",
+    width: "463px",
+    padding: "0px 0px 0px 0px",
+    margin: "0px 0px 0px 0px",
+    //border: "2px dashed blue"
+  }
+});
+
+// Charts
+var loadMessage = ui.Label({
+  value: "Waiting for map layers . . . (If page hangs, please wait)",
+  style: {
+    fontSize: "14px",
+    fontWeight: "300",
+    whiteSpace: "pre-line",
+    textAlign: "justify",
+    color: "#c92c00",
+    backgroundColor: "#ffd2ba",
+    height: "29px",
+    padding: "0px 0px 0px 0px",
+    margin: "0px 0px 0px 0px",
+    //border: "2px dashed red"
   }
 });
 var panelChart1 = ui.Panel({
@@ -1817,8 +2043,9 @@ var panelChart1 = ui.Panel({
   layout: ui.Panel.Layout.flow(),
   style: {
     padding: "0px, 0px, 0px, 0px",
+    backgroundColor: "rgba(255, 255, 255, 0)",
     stretch: "vertical",
-    width: "490px",
+    width: "459px",
     position: "top-center"
   }
 });
@@ -1826,10 +2053,13 @@ var panelChart2 = ui.Panel({
   widgets: [],
   layout: ui.Panel.Layout.flow(),
   style: {
+    backgroundColor: "rgba(255, 255, 255, 0)",
+    height: "stretch",
+    width: "459px",
+    position: "top-center",
     padding: "0px, 0px, 0px, 0px",
-    stretch: "vertical",
-    width: "490px",
-    position: "top-center"
+    margin: "0px, 0px, 0px, 0px",
+    //border: "2px dashed red",
   }
 });
 var panelChart3 = ui.Panel({
@@ -1837,8 +2067,9 @@ var panelChart3 = ui.Panel({
   layout: ui.Panel.Layout.flow(),
   style: {
     padding: "0px, 0px, 0px, 0px",
+    backgroundColor: "rgba(255, 255, 255, 0)",
     stretch: "vertical",
-    width: "490px",
+    width: "459px",
     position: "top-center"
   }
 });
@@ -1847,41 +2078,149 @@ var panelChart4 = ui.Panel({
   layout: ui.Panel.Layout.flow(),
   style: {
     padding: "0px, 0px, 0px, 0px",
+    backgroundColor: "rgba(255, 255, 255, 0)",
     stretch: "vertical",
-    width: "490px",
+    width: "459px",
     position: "top-center"
   }
 });
 var panelCharts = ui.Panel({
-  widgets: [panelChart1, panelChart2, panelChart3, panelChart4],
+  widgets: [loadMessage, panelChart1, panelChart2, panelChart3, panelChart4],
   layout: ui.Panel.Layout.flow(),
   style: {
-    padding: "0px, 0px, 0px, 0px",
-    stretch: "vertical",
-    //height: "300px",
-    width: "490px",
-    position: "top-center"
+    height: "stretch",
+    width: "463px",
+    backgroundColor: "rgba(255, 255, 255, 0)",
+    position: "top-center",
+    padding: "0px 0px 0px 0px",
+    margin: "0px 0px 0px 0px",
+    //border: "2px dashed red",
   }
 });
-var panelUser = ui.Panel({
-  widgets: [labelTitle, labelSettingsInfo, labelSettings, labelAutoApplied, labelDraw, buttonDraw, sliderTransectWidth, labelDate, dateSlider, advanceDaysSlider, labelSatellite, satelliteSelectWrapper, labelResults, labelResultsInfo, loadMessage, panelLinks],
+
+// Donwload
+var labelDownloadSubtitle = ui.Label({
+  value: "Download",
+  style: {
+    fontSize: "16px",
+    fontWeight: "500",
+    whiteSpace: "pre-line",
+    textAlign: "justify",
+    height: "25px",
+    padding: "0px 0px 0px 0px",
+    margin: "0px 0px 0px 0px",
+    //border: "2px dashed red"
+  }
+});
+var loadMessage2 = ui.Label({
+  value: "Waiting for map layers . . . (If page hangs, please wait)",
+  style: {
+    fontSize: "14px",
+    fontWeight: "300",
+    whiteSpace: "pre-line",
+    textAlign: "justify",
+    color: "#c92c00",
+    backgroundColor: "#ffd2ba",
+    height: "29px",
+    padding: "0px 0px 0px 0px",
+    margin: "5px 0px 0px 0px",
+    //border: "2px dashed red"
+  }
+});
+var downloadLabelSnowlines = ui.Label({
+  value: "Loading . . .",
+  style: {
+    height: "20px",
+    padding: "0px, 0px, 0px, 0px",
+    margin: "0px, 0px, 0px, 0px",
+    shown: false
+  }
+});
+var downloadLabelClimate = ui.Label({
+  value: "Loading . . .",
+  style: {
+    height: "20px",
+    padding: "0px, 0px, 0px, 0px",
+    margin: "0px, 0px, 0px, 0px",
+    shown: false
+  }
+});
+var panelLinks = ui.Panel({
+  widgets: [labelDownloadSubtitle, loadMessage2, downloadLabelSnowlines, downloadLabelClimate],
   layout: ui.Panel.Layout.flow(),
   style: {
+    height: "stretch",//"98px",
+    width: "463px",
     padding: "0px, 0px, 0px, 0px",
-    stretch: "vertical",
-    //height: "300px",
-    width: "490px",
-    position: "top-center"
+    margin: "0px, 0px, 0px, 0px",
+    //border: "2px dashed red",
   }
 });
+
+// Credits
+var labelCreditsTitle = ui.Label({
+  value: "Credits",
+  style: {
+    fontSize: "28px",
+    fontWeight: "400",
+    whiteSpace: "pre-line",
+    textAlign: "justify",
+    height: "28px",
+    padding: "0px 0px 0px 0px",
+    margin: "0px 0px 0px 0px",
+    //border: "2px dashed red"
+  }
+});
+var labelSources = ui.Label({
+  value: "Data Sources:\n- Imagery from the Landsat programme, USGS\n- Altitude from ALOS World 3D DSM, JAXA EORC\n- Climate data from the ERA5-land Climate Reanalysis (This study contains modified Copernicus Climate Change Service Information 2022 for which neither the European Commission nor ECMWF is responsible)\n- Glacier and ice caps from GLIMS\n- Waterbodies from EU JRC Waterbodies.",
+  style: {
+    fontSize: "16px",
+    fontWeight: "300",
+    whiteSpace: "pre-line",
+    textAlign: "justify",
+    height: "190px",
+    padding: "0px 0px 0px 0px",
+    margin: "32px 0px 0px 0px",
+    //border: "2px dashed red"
+  }
+});
+var labelCredits = ui.Label({
+  value: "Author: Earth Engine app and algorithms created by Laurie Quincey, 2022",
+  style: {
+    fontSize: "16px",
+    fontWeight: "300",
+    whiteSpace: "pre-line",
+    textAlign: "justify",
+    height: "40px",
+    padding: "0px 0px 0px 0px",
+    margin: "220px 0px 0px 0px",
+    //border: "2px dashed red"
+  }
+});
+labelCredits.setUrl("https://github.com/lauriequincey/snowlines");
+
+var panelCredits = ui.Panel({
+  widgets: [labelCreditsTitle, labelSources, labelCredits],
+  layout: ui.Panel.Layout.absolute(),
+  style: {
+    height: "275px",
+    width: "stretch",
+    padding: "0px 0px 0px 0px",
+    margin: "25px 0px 0px 0px",
+    //border: "2px dashed blue"
+  }
+});
+
+// Combine to root panel
 var panelMain = ui.Panel({
-  widgets: [panelUser, panelCharts, labelCredits2, labelCredits],
+  widgets: [panelIntro, panelSettings, panelResults, panelCharts, panelLinks, panelCredits],
   layout: ui.Panel.Layout.flow(),
   style: {
-    padding: "0px, 0px, 0px, 0px",
     height: "100%",
-    width: "510px",
-    position: "middle-left"
+    width: "500px",
+    padding: "0px 12px 0px 12px",
+    margin: "0px 0px 0px 0px",
+    //border: "2px dashed red"
   }
 });
 
