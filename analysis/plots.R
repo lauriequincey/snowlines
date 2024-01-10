@@ -386,7 +386,7 @@ climateSpaceSnowfallPlot <- ggplot() +
   theme_classic() +
   scale_x_continuous(position = "top") +
   scale_y_continuous(n.breaks = 8) +
-  labs(x = "Distance (km)", y = "Snowfall SWE (cm)") +
+  labs(x = "Distance (km)", y = "Snowfall SWE (mmd"^-1*")") +
   theme(legend.title = element_blank(),
         legend.position = c(0.90, 0.85),
         legend.background = element_blank()) +
@@ -425,7 +425,7 @@ climateSpaceInsolationPlot <- ggplot() +
   geom_smooth(data = climateSpace, aes(x = distance, y = summer_surface_solar_radiation_downwards_mean), method = "glm", formula = y ~ poly(x, 2), colour = summer, fill = summer, lwd = 0.5) +
   theme_classic() +
   scale_y_continuous(n.breaks = 8) +
-  labs(x = "Distance (km)", y = expression("Surface Solar Downwelling Radiation (Mjm"^-2*")")) +
+  labs(x = "Distance (km)", y = expression("Surface Solar Downwelling Radiation (Mjm"^-2*"d"^-1*")")) +
   theme(legend.position = "none") +
   guides(shape = "none")
 
@@ -492,7 +492,7 @@ climateTimeSnowfallPlot <- ggplot() +
   scale_x_datetime(breaks =  as.POSIXct(x = paste(seq(1982, 2021, 3), 1, 1, sep = "-"), origin = "1970-01-01"),
                    labels = seq(1982, 2021, 3),
                    position = "top") +
-  labs(x = "Year", y = "Snowfall SWE (cm)") +
+  labs(x = "Year", y = "Snowfall SWE (mmd"^-1*")") +
   theme(legend.title = element_blank(),
         legend.position = c(0.11, 0.85),
         legend.background = element_blank()) +
@@ -535,7 +535,7 @@ climateTimeInsolationPlot <- ggplot() +
   scale_y_continuous(n.breaks = 8) +
   scale_x_datetime(breaks =  as.POSIXct(x = paste(seq(1982, 2021, 3), 1, 1, sep = "-"), origin = "1970-01-01"),
                    labels = seq(1982, 2021, 3)) +
-  labs(x = "Year", y = expression("Surface Solar Downwelling Radiation (Mjm"^-2*")")) +
+  labs(x = "Year", y = expression("Surface Solar Downwelling Radiation (Mjm"^-2*"d"^-1*")")) +
   theme(legend.position = "none") +
   guides(shape = "none")
 

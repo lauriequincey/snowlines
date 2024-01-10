@@ -107,16 +107,26 @@ stat.validation <- data.frame(
   "ols_fstat" = as.numeric(as.character(summary(ols_regression)$fstatistic[1]))) # ols_fstat,
 
 # Mean Absolute Error ####
+require("Metrics")
+#install.packages("Metrics")
+library(Metrics)
+
 getMae <- function(data, by, thresholdLow, thresholdHigh, col1, col2) {
   sub = subset(data, by > thresholdLow & by < thresholdHigh)
   print(nrow(sub))
   #print(summary(lm( sub[, col2] / (sub[, col2] - sub[, col1]) )))
-  mae = mean(sub[, col2] - sub[, col1])
+  mae = mae(sub[, col2], sub[, col1])
 }
-maeAll = mean(data.validation$landsatSnowCoverPercentage - data.validation$terraSnowCoverPercentage)
+
+maeAll = mae(data.validation$landsatSnowCoverPercentage, data.validation$terraSnowCoverPercentage)
 maeImgAll = getMae(data.validation, data.validation$sunElevation, min(data.sun), max(data.sun), "landsatSnowCoverPercentage", "terraSnowCoverPercentage")
 maeImgSd = getMae(data.validation, data.validation$sunElevation, mean(data.sun$sun) - sd(data.sun$sun), mean(data.sun$sun) + sd(data.sun$sun), "landsatSnowCoverPercentage", "terraSnowCoverPercentage")
 
+# Save Outputs ####
+saveRDS(object = stat.validation, file = "~/snowlines/outputs/validation/stat.validation.rds")
+saveRDS(object = mae_all, file = "~/snowlines/outputs/validation/mae_all.rds")
+saveRDS(object = mae_snowline_all, file = "~/snowlines/outputs/validation/mae_snowline_all.rds")
+saveRDS(object = mae_snowline_majority, file = "~/snowlines/outputs/validation/mae_snowline_majority.rds")
 # Save Outputs ####
 saveRDS(object = stat.validation, file = "~/snowlines/outputs/validation/stat.validation.rds")
 saveRDS(object = mae_all, file = "~/snowlines/outputs/validation/mae_all.rds")
