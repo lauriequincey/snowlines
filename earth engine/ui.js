@@ -1642,11 +1642,39 @@ var labelIntroText = ui.Label({
     //border: "2px dashed red"
   }
 });
+var labelReference = ui.Label({
+  value: "Quincey, L., Anderson, K., Reynolds, D. J., & Harrison, S. (2024). Summer snowline altitude gradients in Western Norway are influenced by maritime climate. Geografiska Annaler: Series A, Physical Geography, 1–22.",
+  style: {
+    fontSize: "16px",
+    fontWeight: "300",
+    fontStyle: "italic",
+    whiteSpace: "pre-line",
+    textAlign: "justify",
+    height: "90px",
+    padding: "0px 0px 0px 0px",
+    margin: "270px 0px 0px 0px",
+    //border: "2px dashed red"
+  }
+});
+var labelDOI = ui.Label({
+  value: "https://doi.org/10.1080/04353676.2024.2321426",
+  style: {
+    fontSize: "16px",
+    fontWeight: "300",
+    whiteSpace: "pre-line",
+    textAlign: "justify",
+    height: "20px",
+    padding: "0px 0px 0px 0px",
+    margin: "355px 0px 0px 0px",
+    //border: "2px dashed red"
+  }
+});
+labelDOI.setUrl("https://github.com/lauriequincey/snowlines");
 var panelIntro = ui.Panel({
-  widgets: [labelIntroTitle, labelIntroText],
+  widgets: [labelIntroTitle, labelIntroText, labelReference, labelDOI],
   layout: ui.Panel.Layout.absolute(),
   style: {
-    height: "265px",
+    height: "380px",
     width: "stretch",
     //stretch: "vertical",
     padding: "0px 0px 0px 0px",
@@ -1698,13 +1726,13 @@ var labelSettingsTransectSubtitle = ui.Label({
   }
 });
 var labelSettingsTransectDrawinstructions = ui.Label({
-  value: "Move around the map by clicking and dragging. To draw the transect, enter drawing mode by clicking the button below. Then click on the map to set the start of the transect and click again, elswhere, to set the end of the transect. C  lick the button again to exit and apply your changes. To start over, click the button again.",
+  value: "Move around the map by clicking and dragging. To draw the transect, enter drawing mode by clicking the button below. Then click on the map to set the start of the transect and click again, elswhere, to set the end of the transect. Click the button again to exit and apply your changes. To start over, click the button again.",
   style: {
     fontSize: "16px",
     fontWeight: "300",
     whiteSpace: "pre-line",
     textAlign: "justify",
-    height: "140px",
+    height: "100px",
     padding: "0px 0px 0px 0px",
     margin: "140px 0px 0px 0px",
     //border: "2px dashed red"
@@ -1725,7 +1753,7 @@ var buttonDraw = ui.Button({
     backgroundColor: "rgba(255, 255, 255, 0)",
     position: "top-center",
     padding: "0px 0px 0px 0px",
-    margin: "285px 0px 0px 0px",
+    margin: "245px 0px 0px 0px",
     //border: "2px dashed red"
     
   }
@@ -1739,7 +1767,7 @@ var labelSettingsTransectSliderinstructions = ui.Label({
     textAlign: "justify",
     height: "40px",
     padding: "0px 0px 0px 0px",
-    margin: "335px 0px 0px 0px",
+    margin: "295px 0px 0px 0px",
     //border: "2px dashed red"
   }
 });
@@ -1762,7 +1790,7 @@ var sliderTransectWidth = ui.Slider({
     backgroundColor: "rgba(255, 255, 255, 0)",
     position: "top-left",
     padding: "0px 0px 0px 0px",
-    margin: "365px 0px 0px 0px",
+    margin: "325px 0px 0px 0px",
     //border: "2px dashed red"
   }
 });
@@ -1777,7 +1805,7 @@ var labelSettingsTransectSliderUnits = ui.Label({
     width: "70px",
     height: "20px",
     padding: "0px 0px 0px 0px",
-    margin: "373.5px 0px 0px 388px",
+    margin: "333.5px 0px 0px 388px",
     //border: "2px dashed red"
   }
 });
@@ -1792,7 +1820,7 @@ var labelSettingsDateSubtitle = ui.Label({
     textAlign: "justify",
     height: "20px",
     padding: "0px 0px 0px 0px",
-    margin: "410px 0px 0px 0px",
+    margin: "370px 0px 0px 0px",
     //border: "2px dashed red"
   }
 });
@@ -1805,7 +1833,7 @@ var labelSettingsDateInstructions1 = ui.Label({
     textAlign: "justify",
     height: "40px",
     padding: "0px 0px 0px 0px",
-    margin: "433px 0px 0px 0px",
+    margin: "393px 0px 0px 0px",
     //border: "2px dashed red"
   }
 });
@@ -1825,7 +1853,7 @@ var dateSlider = ui.DateSlider({
     height: "101px",
     backgroundColor: "rgba(255, 255, 255, 0)",
     padding: "0px 0px 0px 0px",
-    margin: "490px 0px 0px 0px",
+    margin: "450px 0px 0px 0px",
     //border: "2px dashed red",
   }
 });
@@ -1838,7 +1866,7 @@ var labelSettingsDateInstructions2 = ui.Label({
     textAlign: "justify",
     height: "40px",
     padding: "0px 0px 0px 0px",
-    margin: "600px 0px 0px 0px",
+    margin: "560px 0px 0px 0px",
     //border: "2px dashed red"
   }
 });
@@ -1859,7 +1887,7 @@ var advanceDaysSlider = ui.Slider({
     height: "20px",
     position: "top-left",
     padding: "0px 0px 0px 0px",
-    margin: "640px 0px 0px 0px",
+    margin: "600px 0px 0px 0px",
     //border: "2px dashed red"
   }
 });
@@ -1874,7 +1902,7 @@ var labelSettingsDateSliderUnits = ui.Label({
     width: "70px",
     height: "20px",
     padding: "0px 0px 0px 0px",
-    margin: "648px 0px 0px 388px",
+    margin: "608px 0px 0px 388px",
     //border: "2px dashed red"
   }
 });
@@ -1889,7 +1917,7 @@ var labelSettingsSatelliteSubtitle = ui.Label({
     textAlign: "justify",
     height: "20px",
     padding: "0px 0px 0px 0px",
-    margin: "680px 0px 0px 0px",
+    margin: "640px 0px 0px 0px",
     //border: "2px dashed red"
   }
 });
@@ -1902,7 +1930,7 @@ var labelSettingsSatelliteInstructions = ui.Label({
     textAlign: "justify",
     height: "60px",
     padding: "0px 0px 0px 0px",
-    margin: "703px 0px 0px 0px",
+    margin: "663px 0px 0px 0px",
     //border: "2px dashed red"
   }
 });
@@ -1915,7 +1943,7 @@ var satelliteSelectWrapper = ui.Panel({
     backgroundColor: "rgba(255, 255, 255, 0)",
     position: "top-center",
     padding: "0px 0px 0px 0px",
-    margin: "765px 0px 0px 0px",
+    margin: "725px 0px 0px 0px",
     //border: "2px dashed red",
   }
 }); // See input components > satellite filter
@@ -1930,7 +1958,7 @@ var panelSettings = ui.Panel({
     ],
   layout: ui.Panel.Layout.absolute(),
   style: {
-    height: "820px",
+    height: "770px",
     width: "stretch",
     //stretch: "vertical",
     padding: "0px 0px 0px 0px",
@@ -2176,6 +2204,7 @@ var labelSources = ui.Label({
   style: {
     fontSize: "16px",
     fontWeight: "300",
+    fontStyle: "italic",
     whiteSpace: "pre-line",
     textAlign: "justify",
     height: "190px",
@@ -2189,6 +2218,7 @@ var labelCredits = ui.Label({
   style: {
     fontSize: "16px",
     fontWeight: "300",
+    fontStyle: "italic",
     whiteSpace: "pre-line",
     textAlign: "justify",
     height: "40px",
