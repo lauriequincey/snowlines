@@ -23,6 +23,3 @@ Resolve snowlines without any code in a matter of minutes for the study transect
 
 ## Analysis Code
 Analysis scripts can be found under the "analysis" folder. They are written in R (v4.1.1).
-
-## License
-Currently, this repository comes with absolutely no license, meaning default copyright laws apply - [what does this mean?](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/licensing-a-repository)
