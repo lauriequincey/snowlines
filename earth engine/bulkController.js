@@ -17,70 +17,136 @@ var inputs = {
   transectWidth: 40,
   advanceDays: 16,
   datesAndSatelltes: [ // for the snowline imagery
-    //{startDate:'1981-07-14', satelliteName: 'Landsat 5'}, // fail
-    //{startDate:'1982-07-16', satelliteName: 'Landsat 5'}, // fail
-    //{startDate:'1983-08-11', satelliteName: 'Landsat 5'}, // fail
-    {startDate:'1984-07-15', satelliteName: 'Landsat 5'}, // success... not enough data
-    {startDate:'1985-07-10', satelliteName: 'Landsat 5'}, // success
-    {startDate:'1986-06-24', satelliteName: 'Landsat 5'}, // success
-    {startDate:'1987-08-23', satelliteName: 'Landsat 5'}, // success
-    {startDate:'1988-06-26', satelliteName: 'Landsat 5'}, // success
-    {startDate:'1989-07-24', satelliteName: 'Landsat 5'}, // success
-    {startDate:'1990-09-01', satelliteName: 'Landsat 5'}, // success... not enough data
-    {startDate:'1991-07-22', satelliteName: 'Landsat 5'}, // success
-    {startDate:'1992-06-27', satelliteName: 'Landsat 5'}, // success
-    {startDate:'1993-07-19', satelliteName: 'Landsat 5'}, // success
-    {startDate:'1994-07-25', satelliteName: 'Landsat 5'}, // success
-    {startDate:'1995-07-20', satelliteName: 'Landsat 5'}, // success
-    //{startDate:'1996-07-04', satelliteName: 'Landsat 5'}, // fail
-    {startDate:'1997-07-13', satelliteName: 'Landsat 5'}, // success
-    {startDate:'1998-07-23', satelliteName: 'Landsat 5'}, // success
-    {startDate:'1999-07-29', satelliteName: 'Landsat 5'}, // success
-    {startDate:'1999-07-29', satelliteName: 'Landsat 7'}, // success
-    {startDate:'2000-07-17', satelliteName: 'Landsat 5'}, // success
-    {startDate:'2000-07-17', satelliteName: 'Landsat 7'}, // success
-    {startDate:'2001-06-28', satelliteName: 'Landsat 5'}, // success
-    {startDate:'2001-06-28', satelliteName: 'Landsat 7'}, // success
-    //{startDate:'2002-07-05', satelliteName: 'Landsat 5'}, // fail
-    {startDate:'2002-07-05', satelliteName: 'Landsat 7'}, // success
-    {startDate:'2003-07-12', satelliteName: 'Landsat 5'}, // success
-    {startDate:'2003-07-12', satelliteName: 'Landsat 7'}, // success
-    {startDate:'2004-07-27', satelliteName: 'Landsat 5'}, // success
-    {startDate:'2004-07-27', satelliteName: 'Landsat 7'}, // success
-    {startDate:'2005-08-03', satelliteName: 'Landsat 5'}, // success
-    //{startDate:'2005-08-03', satelliteName: 'Landsat 7'}, // fail
-    {startDate:'2006-06-29', satelliteName: 'Landsat 5'}, // success
-    {startDate:'2006-06-29', satelliteName: 'Landsat 7'}, // success
-    {startDate:'2007-07-08', satelliteName: 'Landsat 5'}, // success
-    //{startDate:'2007-07-08', satelliteName: 'Landsat 7'}, // fail
-    {startDate:'2008-07-22', satelliteName: 'Landsat 5'}, // success
-    //{startDate:'2008-07-22', satelliteName: 'Landsat 7'}, // fail
-    {startDate:'2009-07-25', satelliteName: 'Landsat 5'}, // success... not enough data
-    {startDate:'2009-07-25', satelliteName: 'Landsat 7'}, // success... not enough data
-    {startDate:'2010-07-04', satelliteName: 'Landsat 5'}, // success... not enough data
-    {startDate:'2010-07-04', satelliteName: 'Landsat 7'}, // success... not enough data
-    {startDate:'2011-07-07', satelliteName: 'Landsat 5'}, // success
-    {startDate:'2011-07-07', satelliteName: 'Landsat 7'}, // success
-    {startDate:'2012-08-02', satelliteName: 'Landsat 7'}, // success
-    {startDate:'2013-07-14', satelliteName: 'Landsat 7'}, // success
-    {startDate:'2013-07-14', satelliteName: 'Landsat 8'}, // success
-    {startDate:'2014-07-11', satelliteName: 'Landsat 7'}, // success
-    {startDate:'2014-07-11', satelliteName: 'Landsat 8'}, // success
-    {startDate:'2015-08-18', satelliteName: 'Landsat 7'}, // success
-    {startDate:'2015-08-18', satelliteName: 'Landsat 8'}, // success
-    {startDate:'2016-06-15', satelliteName: 'Landsat 7'}, // success
-    {startDate:'2016-06-15', satelliteName: 'Landsat 8'}, // success
-    {startDate:'2017-07-03', satelliteName: 'Landsat 7'}, // success
-    {startDate:'2017-07-03', satelliteName: 'Landsat 8'}, // success
-    {startDate:'2018-06-02', satelliteName: 'Landsat 7'}, // success
-    {startDate:'2018-06-02', satelliteName: 'Landsat 8'}, // success
-    {startDate:'2019-06-27', satelliteName: 'Landsat 7'}, // success
-    {startDate:'2019-06-27', satelliteName: 'Landsat 8'}, // success
-    {startDate:'2020-06-27', satelliteName: 'Landsat 7'}, // success
-    {startDate:'2020-06-27', satelliteName: 'Landsat 8'}, // success
-    {startDate:'2021-07-08', satelliteName: 'Landsat 7'}, // success
-    {startDate:'2021-07-08', satelliteName: 'Landsat 8'}, // success
+    {startDate:'1981-07-08', satelliteName: 'Landsat 5'},
+    {startDate:'1982-07-08', satelliteName: 'Landsat 5'},
+    {startDate:'1983-07-08', satelliteName: 'Landsat 5'},
+    {startDate:'1984-07-08', satelliteName: 'Landsat 5'},
+    {startDate:'1985-07-08', satelliteName: 'Landsat 5'},
+    {startDate:'1986-07-08', satelliteName: 'Landsat 5'},
+    {startDate:'1987-07-08', satelliteName: 'Landsat 5'},
+    {startDate:'1988-07-08', satelliteName: 'Landsat 5'},
+    {startDate:'1989-07-08', satelliteName: 'Landsat 5'},
+    {startDate:'1990-07-08', satelliteName: 'Landsat 5'},
+    {startDate:'1991-07-08', satelliteName: 'Landsat 5'},
+    {startDate:'1992-07-08', satelliteName: 'Landsat 5'},
+    {startDate:'1993-07-08', satelliteName: 'Landsat 5'},
+    {startDate:'1994-07-08', satelliteName: 'Landsat 5'},
+    {startDate:'1995-07-08', satelliteName: 'Landsat 5'},
+    {startDate:'1996-07-08', satelliteName: 'Landsat 5'},
+    {startDate:'1997-07-08', satelliteName: 'Landsat 5'},
+    {startDate:'1998-07-08', satelliteName: 'Landsat 5'},
+    {startDate:'1999-07-08', satelliteName: 'Landsat 5'},
+    {startDate:'1999-07-08', satelliteName: 'Landsat 7'},
+    {startDate:'2000-07-08', satelliteName: 'Landsat 5'},
+    {startDate:'2000-07-08', satelliteName: 'Landsat 7'},
+    {startDate:'2001-07-08', satelliteName: 'Landsat 5'},
+    {startDate:'2001-07-08', satelliteName: 'Landsat 7'},
+    {startDate:'2002-07-08', satelliteName: 'Landsat 5'},
+    {startDate:'2002-07-08', satelliteName: 'Landsat 7'},
+    {startDate:'2003-07-08', satelliteName: 'Landsat 5'},
+    {startDate:'2003-07-08', satelliteName: 'Landsat 7'},
+    {startDate:'2004-07-08', satelliteName: 'Landsat 5'},
+    {startDate:'2004-07-08', satelliteName: 'Landsat 7'},
+    {startDate:'2005-07-08', satelliteName: 'Landsat 5'},
+    {startDate:'2005-07-08', satelliteName: 'Landsat 7'},
+    {startDate:'2006-07-08', satelliteName: 'Landsat 5'},
+    {startDate:'2006-07-08', satelliteName: 'Landsat 7'},
+    {startDate:'2007-07-08', satelliteName: 'Landsat 5'},
+    {startDate:'2007-07-08', satelliteName: 'Landsat 7'},
+    {startDate:'2008-07-08', satelliteName: 'Landsat 5'},
+    {startDate:'2008-07-08', satelliteName: 'Landsat 7'},
+    {startDate:'2009-07-08', satelliteName: 'Landsat 5'},
+    {startDate:'2009-07-08', satelliteName: 'Landsat 7'},
+    {startDate:'2010-07-08', satelliteName: 'Landsat 5'},
+    {startDate:'2010-07-08', satelliteName: 'Landsat 7'},
+    {startDate:'2011-07-08', satelliteName: 'Landsat 5'},
+    {startDate:'2011-07-08', satelliteName: 'Landsat 7'},
+    {startDate:'2012-07-08', satelliteName: 'Landsat 5'},
+    {startDate:'2012-07-08', satelliteName: 'Landsat 7'},
+    {startDate:'2013-07-08', satelliteName: 'Landsat 7'},
+    {startDate:'2013-07-08', satelliteName: 'Landsat 8'},
+    {startDate:'2014-07-08', satelliteName: 'Landsat 7'},
+    {startDate:'2014-07-08', satelliteName: 'Landsat 8'},
+    {startDate:'2015-07-08', satelliteName: 'Landsat 7'},
+    {startDate:'2015-07-08', satelliteName: 'Landsat 8'},
+    {startDate:'2016-07-08', satelliteName: 'Landsat 7'},
+    {startDate:'2016-07-08', satelliteName: 'Landsat 8'},
+    {startDate:'2017-07-08', satelliteName: 'Landsat 7'},
+    {startDate:'2017-07-08', satelliteName: 'Landsat 8'},
+    {startDate:'2018-07-08', satelliteName: 'Landsat 7'},
+    {startDate:'2018-07-08', satelliteName: 'Landsat 8'},
+    {startDate:'2019-07-08', satelliteName: 'Landsat 7'},
+    {startDate:'2019-07-08', satelliteName: 'Landsat 8'},
+    {startDate:'2020-07-08', satelliteName: 'Landsat 7'},
+    {startDate:'2020-07-08', satelliteName: 'Landsat 8'},
+    {startDate:'2021-07-08', satelliteName: 'Landsat 7'},
+    {startDate:'2021-07-08', satelliteName: 'Landsat 8'},
   ],
+  // datesAndSatelltesOLD: [ // for the snowline imagery
+  //   //{startDate:'1981-07-14', satelliteName: 'Landsat 5'}, // fail
+  //   //{startDate:'1982-07-16', satelliteName: 'Landsat 5'}, // fail
+  //   //{startDate:'1983-08-11', satelliteName: 'Landsat 5'}, // fail
+  //   {startDate:'1984-07-15', satelliteName: 'Landsat 5'}, // success... not enough data
+  //   {startDate:'1985-07-10', satelliteName: 'Landsat 5'}, // success
+  //   {startDate:'1986-06-24', satelliteName: 'Landsat 5'}, // success
+  //   {startDate:'1987-08-23', satelliteName: 'Landsat 5'}, // success
+  //   {startDate:'1988-06-26', satelliteName: 'Landsat 5'}, // success
+  //   {startDate:'1989-07-24', satelliteName: 'Landsat 5'}, // success
+  //   {startDate:'1990-09-01', satelliteName: 'Landsat 5'}, // success... not enough data
+  //   {startDate:'1991-07-22', satelliteName: 'Landsat 5'}, // success
+  //   {startDate:'1992-06-27', satelliteName: 'Landsat 5'}, // success
+  //   {startDate:'1993-07-19', satelliteName: 'Landsat 5'}, // success
+  //   {startDate:'1994-07-25', satelliteName: 'Landsat 5'}, // success
+  //   {startDate:'1995-07-20', satelliteName: 'Landsat 5'}, // success
+  //   //{startDate:'1996-07-04', satelliteName: 'Landsat 5'}, // fail
+  //   {startDate:'1997-07-13', satelliteName: 'Landsat 5'}, // success
+  //   {startDate:'1998-07-23', satelliteName: 'Landsat 5'}, // success
+  //   {startDate:'1999-07-29', satelliteName: 'Landsat 5'}, // success
+  //   {startDate:'1999-07-29', satelliteName: 'Landsat 7'}, // success
+  //   {startDate:'2000-07-17', satelliteName: 'Landsat 5'}, // success
+  //   {startDate:'2000-07-17', satelliteName: 'Landsat 7'}, // success
+  //   {startDate:'2001-06-28', satelliteName: 'Landsat 5'}, // success
+  //   {startDate:'2001-06-28', satelliteName: 'Landsat 7'}, // success
+  //   //{startDate:'2002-07-05', satelliteName: 'Landsat 5'}, // fail
+  //   {startDate:'2002-07-05', satelliteName: 'Landsat 7'}, // success
+  //   {startDate:'2003-07-12', satelliteName: 'Landsat 5'}, // success
+  //   {startDate:'2003-07-12', satelliteName: 'Landsat 7'}, // success
+  //   {startDate:'2004-07-27', satelliteName: 'Landsat 5'}, // success
+  //   {startDate:'2004-07-27', satelliteName: 'Landsat 7'}, // success
+  //   {startDate:'2005-08-03', satelliteName: 'Landsat 5'}, // success
+  //   //{startDate:'2005-08-03', satelliteName: 'Landsat 7'}, // fail
+  //   {startDate:'2006-06-29', satelliteName: 'Landsat 5'}, // success
+  //   {startDate:'2006-06-29', satelliteName: 'Landsat 7'}, // success
+  //   {startDate:'2007-07-08', satelliteName: 'Landsat 5'}, // success
+  //   //{startDate:'2007-07-08', satelliteName: 'Landsat 7'}, // fail
+  //   {startDate:'2008-07-22', satelliteName: 'Landsat 5'}, // success
+  //   //{startDate:'2008-07-22', satelliteName: 'Landsat 7'}, // fail
+  //   {startDate:'2009-07-25', satelliteName: 'Landsat 5'}, // success... not enough data
+  //   {startDate:'2009-07-25', satelliteName: 'Landsat 7'}, // success... not enough data
+  //   {startDate:'2010-07-04', satelliteName: 'Landsat 5'}, // success... not enough data
+  //   {startDate:'2010-07-04', satelliteName: 'Landsat 7'}, // success... not enough data
+  //   {startDate:'2011-07-07', satelliteName: 'Landsat 5'}, // success
+  //   {startDate:'2011-07-07', satelliteName: 'Landsat 7'}, // success
+  //   {startDate:'2012-08-02', satelliteName: 'Landsat 7'}, // success
+  //   {startDate:'2013-07-14', satelliteName: 'Landsat 7'}, // success
+  //   {startDate:'2013-07-14', satelliteName: 'Landsat 8'}, // success
+  //   {startDate:'2014-07-11', satelliteName: 'Landsat 7'}, // success
+  //   {startDate:'2014-07-11', satelliteName: 'Landsat 8'}, // success
+  //   {startDate:'2015-08-18', satelliteName: 'Landsat 7'}, // success
+  //   {startDate:'2015-08-18', satelliteName: 'Landsat 8'}, // success
+  //   {startDate:'2016-06-15', satelliteName: 'Landsat 7'}, // success
+  //   {startDate:'2016-06-15', satelliteName: 'Landsat 8'}, // success
+  //   {startDate:'2017-07-03', satelliteName: 'Landsat 7'}, // success
+  //   {startDate:'2017-07-03', satelliteName: 'Landsat 8'}, // success
+  //   {startDate:'2018-06-02', satelliteName: 'Landsat 7'}, // success
+  //   {startDate:'2018-06-02', satelliteName: 'Landsat 8'}, // success
+  //   {startDate:'2019-06-27', satelliteName: 'Landsat 7'}, // success
+  //   {startDate:'2019-06-27', satelliteName: 'Landsat 8'}, // success
+  //   {startDate:'2020-06-27', satelliteName: 'Landsat 7'}, // success
+  //   {startDate:'2020-06-27', satelliteName: 'Landsat 8'}, // success
+  //   {startDate:'2021-07-08', satelliteName: 'Landsat 7'}, // success
+  //   {startDate:'2021-07-08', satelliteName: 'Landsat 8'}, // success
+  // ],
   years: [ // for the climate data
     //'1981', (Would require autumn and start of winter seasons from 1990)
     '1982',
@@ -139,29 +205,29 @@ inputs.datesAndSatelltes.map(function(entry) {
     collection: snowline.snowEdgeVector,
     description: 'snowlinesSnowline' + entry.startDate + 'T' + inputs.advanceDays + entry.satelliteName.slice(0, 7) + entry.satelliteName.slice(8, 9),
     folder: ''+ entry.startDate.slice(0, 4),
-    fileNamePrefix: 'snowlinesSnowline' + entry.satelliteName + entry.startDate + 'T' + inputs.advanceDays + entry.satelliteName.slice(0, 7) + entry.satelliteName.slice(8, 9),
+    fileNamePrefix: 'snowlinesSnowline' + entry.startDate + 'T' + inputs.advanceDays + entry.satelliteName.slice(0, 7) + entry.satelliteName.slice(8, 9),
     fileFormat: 'CSV'
   });
 });
 
 // Climate
 inputs.years.map(function(year) {
-  var climate = climateModule.climate(transect.transect, transect.ltCoord, transect.lbCoord, year);
-  // climate.getDownloadURL({
-  //   format: "csv",
-  //   filename: "snowlinesClimate" + year,
-  //   callback: function(url) {
-  //     downloadLabelClimate.setValue("Download Full Climate Dataset");
-  //     downloadLabelClimate = downloadLabelClimate.setUrl(url);
-  //   }
-  // });
-  Export.table.toDrive({
-    collection: climate,
-    description: 'snowlinesClimate' + year,
-    folder: ''+ year,
-    fileNamePrefix: 'snowlinesClimate' + year,
-    fileFormat: 'CSV',
-  });
+ var climate = climateModule.climate(transect.transect, transect.ltCoord, transect.lbCoord, year);
+ // climate.getDownloadURL({
+ //   format: "csv",
+ //   filename: "snowlinesClimate" + year,
+ //   callback: function(url) {
+ //     downloadLabelClimate.setValue("Download Full Climate Dataset");
+ //     downloadLabelClimate = downloadLabelClimate.setUrl(url);
+ //   }
+ // });
+ Export.table.toDrive({
+   collection: climate,
+   description: 'snowlinesClimate' + year,
+   folder: ''+ year,
+   fileNamePrefix: 'snowlinesClimate' + year,
+   fileFormat: 'CSV',
+ });
 });
 
 // Validation

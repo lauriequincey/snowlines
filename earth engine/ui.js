@@ -1669,7 +1669,7 @@ var labelDOI = ui.Label({
     //border: "2px dashed red"
   }
 });
-labelDOI.setUrl("https://github.com/lauriequincey/snowlines");
+labelDOI.setUrl("https://doi.org/10.1080/04353676.2024.2321426");
 var panelIntro = ui.Panel({
   widgets: [labelIntroTitle, labelIntroText, labelReference, labelDOI],
   layout: ui.Panel.Layout.absolute(),

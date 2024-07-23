@@ -58,7 +58,7 @@ Export.table.toDrive({
   collection: snowline.snowEdgeVector,
   description: 'snowlinesSnowline' + inputs.startDate + 'T' + inputs.advanceDays + inputs.satelliteName.slice(0, 7) + inputs.satelliteName.slice(8, 9),
   folder: ''+ year,
-  fileNamePrefix: 'snowlinesSnowline' + inputs.satelliteName + inputs.startDate + 'T' + inputs.satelliteName.slice(0, 7) + inputs.satelliteName.slice(8, 9),
+  fileNamePrefix: 'snowlinesSnowline' + inputs.startDate + 'T' + inputs.advanceDays + inputs.satelliteName.slice(0, 7) + inputs.satelliteName.slice(8, 9),
   fileFormat: 'CSV',
 });
 
@@ -66,13 +66,13 @@ Export.table.toDrive({
 // var downloadLabelClimate = ui.Label({value: " . . . loading"});
 // print(downloadLabelClimate);
 // climate.getDownloadURL({
-//   format: "csv",
-//   filename: "snowlinesClimate" + year,
-//   callback: function(url) {
-//     downloadLabelClimate.setValue("Download Full Climate Dataset");
-//     downloadLabelClimate = downloadLabelClimate.setUrl(url);
-//   }
-// });
+// format: "csv",
+// filename: "snowlinesClimate" + year,
+// callback: function(url) {
+//   downloadLabelClimate.setValue("Download Full Climate Dataset");
+//   downloadLabelClimate = downloadLabelClimate.setUrl(url);
+// }
+//});
 Export.table.toDrive({
   collection: climate,
   description: 'snowlinesClimate' + year,

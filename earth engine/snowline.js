@@ -274,7 +274,8 @@ exports.snowlinesAlgorithm = function(transect, imageCollection, ltCoord, lbCoor
     waterMask: waterMask,
     qualityMosaic: qualityMosaic,
     snowEdgeRaster: snowEdgeRaster,
-    snowEdgeVector: snowEdgeVector.select("[^snow_edge].*")
+    snowEdgeVector: snowEdgeVector.select(["altitude", "altitude_base_error", "altitude_translation_error", "aqcuisition_time", "aspect", "distance", "latitude", "longitude", "slope", "sun_elevation"])
+      //.select("[^snow_edge].*")
   };
   
 };
